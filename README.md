@@ -17,7 +17,9 @@ After merging, the final dataset will have the following columns:
 - successful - target for ML
 - is_test - train/test split
 
-We built a mock-up database with only the important features for the machine learning model, i.e. song/year/word columns/successful/is_test, that we uploaded to Postgres.
+The mock_up database, that we built, has only the important features for the first stage of machine learning model, i.e. song/year/word columns/successful/is_test. We'll be able to easily add more features (from the Spotify table) while merging the tables.
+
+<img src="mockup_db.png" width="350">
 
 
 

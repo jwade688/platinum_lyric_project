@@ -33,6 +33,11 @@ SciKitLearn is the Python Machine Learning library we will be using to create th
 The dashboard will be created using JavaScript, including interactive visualizations using D3.js to retrieve data from our database, as well as Tableau visualizations. The final app will be deployed to GitHub Pages.
 Coll
 
+## Communication protocol:
+- Daily slack communications
+- 2-4 zoom calls 
+- Code reviews on GitHub
+
 ## Branch overview of deliverables:
 This is where you can find each deliverable:
 - technology.md: jacob_branch

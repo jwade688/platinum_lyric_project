@@ -1,0 +1,18 @@
+body {
+    color: #ffffff;
+}
+
+/* .row-title {
+    margin-left: 15px;
+} */
+
+.jumbotron {
+    /* background-image: url("../images/nasa.jpg"); */
+    background-color: #4f5357;
+    background-size: 100% 100%;
+    text-align: center;
+}
+
+.bg-dark {
+    border: 1px #343A40
+}

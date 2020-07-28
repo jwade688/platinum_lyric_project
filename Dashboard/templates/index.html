@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>The Platinum Lyric Project</title>
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+  <link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+  crossorigin="anonymous"
+  />
+  <link rel="stylesheet" href="static/css/style.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body class="bg-dark">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 jumbotron text-center jumbotron-fluid" style="background-size: 100%;">
+        <h1 class="display-4">The Platinum Lyric Project</h1>
+        <p class="lead">Use the interactive charts below to explore the dataset</p>
+        <!-- <h3 class="text-muted">Use the interactive charts below to explore the dataset</h3> -->
+      </div>
+    </div>
+
+    <div class="row row-title">
+      <h4>Enter song lyrics below to find out if it will be a hit or not</h4>
+    </div>
+    <hr class="my-4">
+
+    <div class="row">
+
+      <div class="col-md-6">
+        <form>
+          <div class="form-group">
+            <textarea class="form-control form-control-lg" id="lyricsInput" rows="9" placeholder="Enter song lyrics here"></textarea>
+          </div>
+        </form>
+      </div>
+      
+      <div class="col-md-3">
+        <div class="form-group">
+          <select class="form-control" id="genreSelect" placeholder="Select Genre">
+            <option selected>Select genre</option>
+            <option>Rock</option>
+            <option>Pop</option>
+            <option>Country</option>
+            <option>Something Else</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <select class="form-control" id="genreSelect" placeholder="Select Genre">
+            <option selected>Select Something Else</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-secondary" style="">Run</button>
+      </div>
+
+      <div class="col-md-3">
+        <div class="alert alert-success" role="alert">
+          <h4 class="alert-heading">This song will be a Hit!</h4>
+          <hr>
+          <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+          <button type="button" class="btn btn-secondary">Test another one!</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Chart</h3>
+        <div id="bargraph">
+          <script type="text/javascript">
+            var graphs = {{graphJSON | safe}};
+            Plotly.plot('bargraph',graphs || {});
+          </script>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="row">
+
+      <div class="col-md-2">
+        <div class="well">
+          <h5>Compare to year:</h5>
+          <select id="selDataset" onchange="optionChanged(this.value)"></select>
+        </div>
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Demographic Info</h3>
+          </div>
+          <div id="sample-metadata" class="panel-body"></div>
+        </div>
+      </div>
+
+      <div class="col-md-5">
+        <div id="bar"></div>
+      </div>
+
+      <div class="col-md-5">
+        <div id="gauge"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div id="bubble"></div>
+      </div>
+    </div> -->
+
+  </div>
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+
+</html>

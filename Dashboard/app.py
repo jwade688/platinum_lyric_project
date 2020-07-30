@@ -21,7 +21,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://postgres:{password}@local
 # Create a Flask-SQLAlchemy instance
 db = SQLAlchemy(app)
 
-def nlp_lyrics():
+def lyrics_BoW():
     lyrics = "My house is beautiful"
     # Tokenizing
     words = nltk.word_tokenize(lyrics)

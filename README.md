@@ -39,6 +39,7 @@ The dashboard will be created using an HTML template, a Python app, SQLAlchemy t
 
 ## Branch overview of deliverables:
 This is where you can find each deliverable:
-- technology.md: jacob_branch
-- erd and cleaned data: coco_branch
-- machine model mockup: samin_branch
+- [Presentation](https://docs.google.com/presentation/d/1A0AKYPwMegvyjUKwBNw9hxdayrQQJ91O0xqz_ttyTOk/edit?usp=sharing) and technology.md: jacob_branch
+- ERD and cleaned data: coco_branch
+- Machine Learning Model mockup: samin_branch
+- [Dashboard blueprint](https://docs.google.com/presentation/d/1gxNVCnKWD1_Jmf-CY_yT63tSsHjaNtzWNV43MqQTD4s/edit?usp=sharing) and code: aline_branch

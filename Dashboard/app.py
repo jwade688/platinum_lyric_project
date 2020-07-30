@@ -7,6 +7,11 @@ import pandas as pd
 import numpy as np
 import json
 
+import nltk
+from nltk import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+
 app = Flask(__name__)
 
 # Set up postgres connection
@@ -15,6 +20,28 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://postgres:{password}@local
 
 # Create a Flask-SQLAlchemy instance
 db = SQLAlchemy(app)
+
+def nlp_lyrics():
+    lyrics = "My house is beautiful"
+    # Tokenizing
+    words = nltk.word_tokenize(lyrics)
+    
+    # Create an object of class PorterStemmer; set stopwords from NLTK as variable
+    porter = PorterStemmer()
+    stop_words = stopwords.words('english')
+
+    # Removing stopwords and stemming the remaining ones
+    filtered_lyrics = [porter.stem(w) for w in words if not w in stop_words]
+    
+    # Creating frequency of each word and storing in dataframe
+    wordfreq = {}
+    for word in filtered_lyrics:
+        if word not in wordfreq.keys():
+            wordfreq[word] = 1
+        else:
+            wordfreq[word] += 1
+    wordfreq_df = pd.DataFrame(data=wordfreq, index=[0])
+
 
 def create_plot():
     N = 40

@@ -40,6 +40,12 @@ def lyrics_BoW():
             wordfreq[word] = 1
         else:
             wordfreq[word] += 1
+    
+    # Updating dictionary with the genre (user input)
+    genre = "rock"
+    wordfreq.update({"genre": genre})
+
+    # Adding dictionary to dataframe to be used in the ML Model
     wordfreq_df = pd.DataFrame(data=wordfreq, index=[0])
 
 
@@ -54,7 +60,7 @@ def create_plot():
             x=df['x'], # assign x as the dataframe column 'x'
             y=df['y']
         )
-    ]
+    ]   
 
     graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON

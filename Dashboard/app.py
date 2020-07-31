@@ -11,6 +11,7 @@ import nltk
 from nltk import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
+from word_columns import word_columns
 
 app = Flask(__name__)
 
@@ -22,9 +23,15 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://postgres:{password}@local
 db = SQLAlchemy(app)
 
 
+from word_columns import word_columns
 
-def lyrics_BoW():
-    lyrics = "My house is beautiful"
+def lyrics_BoW(lyrics):
+    
+    # Creating dataframe to match trained ML model, with words as columns and row filled with zeros
+    print(len(word_columns))    
+    z = numpy.zeros(dtype=int, shape=(1,len(word_columns)))
+    model_df = pd.DataFrame(z, columns=word_columns)
+
     # Tokenizing
     words = nltk.word_tokenize(lyrics)
     
@@ -36,19 +43,15 @@ def lyrics_BoW():
     filtered_lyrics = [porter.stem(w) for w in words if not w in stop_words]
     
     # Creating frequency of each word and storing in dataframe
-    wordfreq = {}
     for word in filtered_lyrics:
-        if word not in wordfreq.keys():
-            wordfreq[word] = 1
-        else:
-            wordfreq[word] += 1
+        if word in model_df.columns:
+            model_df[word] += 1
     
     # Updating dictionary with the genre (user input)
     genre = "rock"
-    wordfreq.update({"genre": genre})
+    model_df["genre"] = genre
 
-    # Adding dictionary to dataframe to be used in the ML Model
-    wordfreq_df = pd.DataFrame(data=wordfreq, index=[0])
+    return filtered_lyrics
 
 
 def create_plot():
@@ -88,14 +91,19 @@ def index():
 @app.route("/lyrics/<userInput>", methods=["GET"])
 
 def post_lyrics(userInput=None):
-    print(userInput)
-    # jsdata = request.form[{lyrics}]
-    # unique_id = create_csv(jsdata)
-    # params = { 'uuid' : unique_id }
-    response = jsonify("lyrics dfksjdfks")
+    print(userInput) # This will print user's input to the terminal
+
+    # response = jsonify("hard coded test from Flask route")
+    response = jsonify(userInput) # returns a flask.Response() object that already has the appropriate content-type header 'application/json' for use with json responses
     response.headers.add("Access-Control-Allow-Origin", "*")
-    # print(request)
-    return response
+
+    lyrics_json = json.dumps(userInput) # return an encoded string, which would require manually adding the MIME type header.
+    print(f"Printing response: {lyrics_json}")
+    # lyrics_BoW(lyrics_json)
+    
+    return response # Function returns this, but only gets printed to Console because of d3.json function --> console.log(data)
+
+
 
 @app.route("/tennis_players", methods=['GET'])
 

@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="static/css/style.css">
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 
 </head>
@@ -44,9 +45,12 @@
             <script type="text/javascript">
               function getText() {
                 var lyrics = document.getElementById("lyricsInput").value
-                console.log(lyrics)
-                
+                // console.log(lyrics)
+                // var jsonLyrics = JSON.stringify(lyrics)
+
+
                 d3.json("http://127.0.0.1:5000/lyrics/"+lyrics).then(function(data) {
+                  console.log("Entering d3 function")
                   console.log(data)
                 });
                 // d3.json("http://127.0.0.1:5000/lyrics/"+lyrics, {

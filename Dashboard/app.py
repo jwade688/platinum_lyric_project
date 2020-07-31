@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from config import password
 import plotly
@@ -20,6 +20,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://postgres:{password}@local
 
 # Create a Flask-SQLAlchemy instance
 db = SQLAlchemy(app)
+
+
 
 def lyrics_BoW():
     lyrics = "My house is beautiful"
@@ -83,6 +85,17 @@ def index():
     graphJSON = create_plot()
     return render_template("index.html", graphJSON=graphJSON)
 
+@app.route("/lyrics/<userInput>", methods=["GET"])
+
+def post_lyrics(userInput=None):
+    print(userInput)
+    # jsdata = request.form[{lyrics}]
+    # unique_id = create_csv(jsdata)
+    # params = { 'uuid' : unique_id }
+    response = jsonify("lyrics dfksjdfks")
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    # print(request)
+    return response
 
 @app.route("/tennis_players", methods=['GET'])
 
@@ -98,4 +111,7 @@ def tennis_players():
 
 
 if __name__ == "__main__":
-   app.run(debug=True)
+    app.run(debug=True)
+    # we first try to grab the port from the app’s environment, and if not found, it defaults to port 5000
+    # port = int(os.environ.get('PORT', 5000))
+    # app.run(host='0.0.0.0', port=port)

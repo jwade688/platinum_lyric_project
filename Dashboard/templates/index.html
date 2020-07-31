@@ -41,16 +41,13 @@
       <div class="col-md-6">
         <form>
           <div class="form-group">
-            <textarea class="form-control form-control-lg" id="lyricsInput" rows="9" placeholder="Enter song lyrics here"></textarea>
+            <textarea class="form-control form-control-lg" id="lyricsInput" rows="9" placeholder="Enter song lyrics here" style="white-space: pre-wrap;"></textarea>
             <script type="text/javascript">
               function getText() {
-                var lyrics = document.getElementById("lyricsInput").value
-                // console.log(lyrics)
-                // var jsonLyrics = JSON.stringify(lyrics)
-
+                // Get user input and replace line breaks with spaces
+                var lyrics = document.getElementById("lyricsInput").value.replace(/\n/g, " ");
 
                 d3.json("http://127.0.0.1:5000/lyrics/"+lyrics).then(function(data) {
-                  console.log("Entering d3 function")
                   console.log(data)
                 });
                 // d3.json("http://127.0.0.1:5000/lyrics/"+lyrics, {

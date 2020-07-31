@@ -12,6 +12,7 @@ from nltk import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from word_columns import word_columns
+from model import modeltest
 
 app = Flask(__name__)
 
@@ -48,7 +49,11 @@ def lyrics_BoW(lyrics):
     genre = "rock"
     model_dict["genre"] = genre
 
+    # Creating final DataFrame
+    df = pd.DataFrame(data=model_dict, index=[0])
+
     # We'll have to call the ML Model function within this function
+    modeltest(df)
 
     return model_dict
 
@@ -90,17 +95,20 @@ def index():
 @app.route("/lyrics/<userInput>", methods=["GET"])
 
 def post_lyrics(userInput=None):
-    print(userInput) # This will print user's input to the terminal
-
-    # response = jsonify("hard coded test from Flask route")
-    response = jsonify(userInput) # returns a flask.Response() object that already has the appropriate content-type header 'application/json' for use with json responses
+    # jsonify returns a flask.Response() object that already has the appropriate content-type header 'application/json' for use with json responses
+    response = jsonify(userInput) 
     response.headers.add("Access-Control-Allow-Origin", "*")
-
-    lyrics_json = json.dumps(userInput) # return an encoded string, which would require manually adding the MIME type header.
-    print(f"Printing response: {lyrics_json}")
-    lyrics_BoW(lyrics_json)
-
-    return response # Function returns this, but only gets printed to Console because of d3.json function --> console.log(data)
+    
+    # return an encoded string.
+    lyrics_json = json.dumps(userInput) 
+    
+    # Print user's input to the terminal
+    print(f"Printing response: {lyrics_json}") 
+    
+    #Call function to preprocess lyrics and feed it through ML Model
+    lyrics_BoW(lyrics_json) 
+    
+    return response 
 
 
 

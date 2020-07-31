@@ -23,14 +23,11 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://postgres:{password}@local
 db = SQLAlchemy(app)
 
 
-from word_columns import word_columns
 
 def lyrics_BoW(lyrics):
     
-    # Creating dataframe to match trained ML model, with words as columns and row filled with zeros
-    print(len(word_columns))    
-    z = numpy.zeros(dtype=int, shape=(1,len(word_columns)))
-    model_df = pd.DataFrame(z, columns=word_columns)
+    # Creating dictionary to match trained ML model, with words as keys and filled with zeros
+    model_dict = dict.fromkeys(word_columns, 0)
 
     # Tokenizing
     words = nltk.word_tokenize(lyrics)
@@ -42,16 +39,19 @@ def lyrics_BoW(lyrics):
     # Removing stopwords and stemming the remaining ones
     filtered_lyrics = [porter.stem(w) for w in words if not w in stop_words]
     
-    # Creating frequency of each word and storing in dataframe
+    # Creating frequency of each word and storing in model_dict dictionary
     for word in filtered_lyrics:
-        if word in model_df.columns:
-            model_df[word] += 1
+        if word in model_dict.keys():
+            model_dict[word] += 1
     
     # Updating dictionary with the genre (user input)
     genre = "rock"
-    model_df["genre"] = genre
+    model_dict["genre"] = genre
 
-    return filtered_lyrics
+    # We'll have to call the ML Model function within this function
+
+    return model_dict
+
 
 
 def create_plot():
@@ -82,7 +82,6 @@ class Players(db.Model):
     def __repr__(self): 
         return f"<Customer {self.first_name}>"
 
-
 @app.route("/")
 def index():
     graphJSON = create_plot()
@@ -99,8 +98,8 @@ def post_lyrics(userInput=None):
 
     lyrics_json = json.dumps(userInput) # return an encoded string, which would require manually adding the MIME type header.
     print(f"Printing response: {lyrics_json}")
-    # lyrics_BoW(lyrics_json)
-    
+    lyrics_BoW(lyrics_json)
+
     return response # Function returns this, but only gets printed to Console because of d3.json function --> console.log(data)
 
 

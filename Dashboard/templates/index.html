@@ -24,24 +24,28 @@
 <body class="bg-dark">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-12 jumbotron text-center jumbotron-fluid" style="background-size: 100%;">
+      <div class="col-md-12 jumbotron text-center jumbotron-fluid">
         <h1 class="display-4">The Platinum Lyric Project</h1>
         <p class="lead">Use the interactive charts below to explore the dataset</p>
         <!-- <h3 class="text-muted">Use the interactive charts below to explore the dataset</h3> -->
       </div>
     </div>
 
-    <div class="row row-title">
-      <h4>Enter song lyrics below to find out if it will be a hit or not</h4>
+    <div class="row row-title pl-5">
+      <div class="col-md-7">
+        <h2>Enter song lyrics below to find out if it will be a hit or not</h2>
+      </div>
+      <div class="col-md-5">
+      </div>
     </div>
     <hr class="my-4">
 
-    <div class="row">
+    <div class="row pb-4">
 
-      <div class="col-md-6">
+      <div class="col-md-6 pl-5">
         <form>
           <div class="form-group">
-            <textarea class="form-control form-control-lg" id="lyricsInput" rows="9" placeholder="Enter song lyrics here" style="white-space: pre-wrap;"></textarea>
+            <textarea class="form-control form-control-lg" id="lyricsInput" rows="9" placeholder="Enter song lyrics here"></textarea>
             <script type="text/javascript">
               function getText() {
                 // Get user input and replace line breaks with spaces
@@ -68,13 +72,20 @@
       
       <div class="col-md-3">
         <div class="form-group">
-          <select class="form-control" id="genreSelect" placeholder="Select Genre">
+          <select class="form-control" id="genreSelect" placeholder="Select Genre" onchange="optionChanged(this.value)">
             <option selected>Select genre</option>
             <option>Rock</option>
             <option>Pop</option>
             <option>Country</option>
             <option>Something Else</option>
           </select>
+          <script type="text/javascript">
+            function optionChanged(userOption) {
+              d3.json("http://127.0.0.1:5000/genre/"+userOption).then(function(data) {
+                  console.log(data)
+                });
+            };
+          </script>
         </div>
         <div class="form-group">
           <select class="form-control" id="somethingElseSelect" placeholder="Select Genre">
@@ -85,10 +96,10 @@
             <option>4</option>
           </select>
         </div>
-        <button type="button" class="btn btn-secondary" id="runModel" style="" onclick="getText()">Run</button>
+        <button type="button" class="btn btn-secondary btn-block" id="runModel" onclick="getText()">Run</button>
       </div>
 
-      <div class="col-md-3">
+      <div class="col-md-3 pr-5">
         <div class="alert alert-success" role="alert">
           <h4 class="alert-heading">This song will be a Hit!</h4>
           <hr>
@@ -99,7 +110,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="row pl-5 pr-5">
       <div class="col-md-6">
         <h3>Chart</h3>
         <div id="bargraph">

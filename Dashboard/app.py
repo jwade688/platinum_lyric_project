@@ -23,10 +23,13 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://postgres:{password}@local
 # Create a Flask-SQLAlchemy instance
 db = SQLAlchemy(app)
 
-
+# Declaring global variables
+model_dict = {}
+genre = ""
 
 def lyrics_BoW(lyrics):
-    
+    global model_dict
+
     # Creating dictionary to match trained ML model, with words as keys and filled with zeros
     model_dict = dict.fromkeys(word_columns, 0)
 
@@ -45,17 +48,20 @@ def lyrics_BoW(lyrics):
         if word in model_dict.keys():
             model_dict[word] += 1
     
-    # Updating dictionary with the genre (user input)
-    genre = "rock"
-    model_dict["genre"] = genre
+    return model_dict
 
+def run_model():
+    global model_dict
+    global genre
+
+    # Updating dictionary with the genre (user input)
+    model_dict["song_genre"] = genre
+    
     # Creating final DataFrame
     df = pd.DataFrame(data=model_dict, index=[0])
 
-    # We'll have to call the ML Model function within this function
+    # Call the ML Model function within this function
     modeltest(df)
-
-    return model_dict
 
 
 
@@ -71,7 +77,6 @@ def create_plot():
             y=df['y']
         )
     ]   
-
     graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
@@ -106,11 +111,20 @@ def post_lyrics(userInput=None):
     print(f"Printing response: {lyrics_json}") 
     
     #Call function to preprocess lyrics and feed it through ML Model
-    lyrics_BoW(lyrics_json) 
+    lyrics_BoW(lyrics_json)
     
     return response 
 
+@app.route("/genre/<userInput>", methods=["GET"])
 
+def input_genre(userInput=None):
+    global genre
+    response = jsonify(userInput)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    genre = json.dumps(userInput)
+    return response
+
+print(f"Printing outside of function: {genre}")
 
 @app.route("/tennis_players", methods=['GET'])
 

@@ -45,7 +45,7 @@
       <div class="col-md-6 pl-5">
         <form>
           <div class="form-group">
-            <textarea class="form-control form-control-lg" id="lyricsInput" rows="9" placeholder="Enter song lyrics here"></textarea>
+            <textarea class="form-control form-control-lg" id="lyricsInput" rows="9" placeholder="Enter song lyrics here" onchange="getText()"></textarea>
             <script type="text/javascript">
               function getText() {
                 // Get user input and replace line breaks with spaces
@@ -61,7 +61,6 @@
                 // return lyrics
               };
 
-              
               // d3.select("#runModel").on("click", function() {
                 // d3.select("#lyricsInput").style("background-color", "blue")
               // });
@@ -72,13 +71,16 @@
       
       <div class="col-md-3">
         <div class="form-group">
-          <select class="form-control" id="genreSelect" placeholder="Select Genre" onchange="optionChanged(this.value)">
-            <option selected>Select genre</option>
-            <option>Rock</option>
-            <option>Pop</option>
-            <option>Country</option>
-            <option>Something Else</option>
-          </select>
+          <!-- <form action="http://localhost:5000/genre" method="POST"> -->
+            <select class="form-control" id="genreSelect" placeholder="Select Genre" onchange="optionChanged(this.value)">
+            <!-- <select class="form-control" name="selectGenre" id="genreSelect" placeholder="Select Genre"> -->
+              <option selected>Select genre</option>
+              <option>Rock</option>
+              <option>Pop</option>
+              <option>Country</option>
+              <option>Something Else</option>
+            </select>
+          <!-- </form> -->
           <script type="text/javascript">
             function optionChanged(userOption) {
               d3.json("http://127.0.0.1:5000/genre/"+userOption).then(function(data) {
@@ -96,7 +98,22 @@
             <option>4</option>
           </select>
         </div>
-        <button type="button" class="btn btn-secondary btn-block" id="runModel" onclick="getText()">Run</button>
+        <form action="http://localhost:5000/runmodel" method="post">
+          <input type="submit" class="btn btn-secondary btn-block" id="runModel" value="Run"/>
+        </form>
+
+        <!-- <script type="text/javascript">
+          $.ajax({
+            type : "POST",
+            url : '/runmodel',
+            dataType: "json",
+            data: JSON.stringify(this.value),
+            contentType: 'application/json;charset=UTF-8',
+            success: function (data) {
+              console.log(data);
+              }
+            });
+        </script> -->
       </div>
 
       <div class="col-md-3 pr-5">
@@ -113,12 +130,12 @@
     <div class="row pl-5 pr-5">
       <div class="col-md-6">
         <h3>Chart</h3>
-        <div id="bargraph">
+        <!-- <div id="bargraph">
           <script type="text/javascript">
             var graphs = {{graphJSON | safe}};
             Plotly.plot('bargraph',graphs || {});
           </script>
-        </div>
+        </div> -->
       </div>
     </div>
 

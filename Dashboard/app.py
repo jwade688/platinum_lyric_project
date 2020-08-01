@@ -26,6 +26,7 @@ db = SQLAlchemy(app)
 # Declaring global variables
 model_dict = {}
 genre = ""
+prediction = ""
 
 def lyrics_BoW(lyrics):
     global model_dict
@@ -153,6 +154,7 @@ def input_genre(userInput=None):
 @app.route("/runmodel", methods=["GET", "POST"])
 def run_model():
     global model_dict
+    global prediction
     # global genre
     
     if request.method == 'POST':
@@ -161,17 +163,17 @@ def run_model():
         # Updating dictionary with the genre (user input)
         # POSSIBLE PROBLEM: "song_genre" is being inserted in the middle of the dictionary, in alphabetical order
         model_dict["song_genre"] = genre
-        # Creating final DataFrame
+        # Creating final DataFrame to pass into the model function
         # df = pd.DataFrame(data=model_dict, index=[0])
         
         # Call the ML Model function within this function
         # modeltest(df)
+        # ML Model function will return binary prediction
+        prediction = 0
 
-        # return render_template('index.html')
-        return model_dict
+        # return jsonify(prediction)
+    return render_template("index.html", prediction=prediction)
     
-
-
 
 @app.route("/tennis_players", methods=['GET'])
 def tennis_players():
@@ -183,23 +185,7 @@ def tennis_players():
         } for player in players
     ]
     return {"players": results}
-
-db = SQLAlchemy()
-
-# def query_to_list(query, include_field_names=True):
-#     """Turns a SQLAlchemy query into a list of data values."""
-#     column_names = []
-#     for i, obj in enumerate(query.all()):
-#         if i == 0:
-#             column_names = [c.name for c in obj.__table__.columns]
-#             if include_field_names:
-#                 yield column_names
-#         yield obj_to_list(obj, column_names)
-
-
-# def obj_to_list(sa_obj, field_order):
-#     """Takes a SQLAlchemy object - returns a list of all its data"""
-#     return [getattr(sa_obj, field_name, None) for field_name in field_order]
+    
 
 if __name__ == "__main__":
     app.run(debug=True)

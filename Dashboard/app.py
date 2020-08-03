@@ -17,7 +17,7 @@ from model import modeltest
 app = Flask(__name__)
 
 # Set up postgres connection
-app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://postgres:{password}@localhost:5432/tennis_db"
+app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://postgres:{password}@localhost:5432/platinum_lyric"
 # "postgres://admin:donotusethispassword@aws-us-east-1-portal.19.dblayer.com:15813/compose"
 
 # Create a Flask-SQLAlchemy instance
@@ -27,6 +27,7 @@ db = SQLAlchemy(app)
 model_dict = {}
 genre = ""
 prediction = ""
+features_by_year_results = []
 
 def lyrics_BoW(lyrics):
     global model_dict
@@ -67,6 +68,24 @@ def create_plot():
     graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
+def plot_features_by_year():
+    global features_by_year_results
+    year = features_by_year_results[0]["year"]
+    mode = features_by_year_results[0]["mode"]
+    
+    df = pd.DataFrame({"year": year, "mode": mode})
+
+    data = [
+        go.Bar(
+            x = df["year"],
+            y = df["mode"]
+        )
+    ]
+
+    features_by_year_JSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
+    return features_by_year_JSON
+
+
 class Players(db.Model):
     __tablename__ = 'players'
 
@@ -79,11 +98,40 @@ class Players(db.Model):
     def __repr__(self): 
         return f"<Customer {self.first_name}>"
 
+
+class Byyear(db.Model):
+    __tablename__ = 'features_by_year'
+
+    feature_year = db.Column(db.BigInteger(), primary_key=True)
+    feature_popularity = db.Column(db.Float())
+    target_success = db.Column(db.Float())
+    feature_duration = db.Column(db.Float())
+    feature_tempo = db.Column(db.Float())
+    feature_key = db.Column(db.Float())
+    feature_mode = db.Column(db.Float())
+    feature_acoustiness = db.Column(db.Float())
+    feature_instrumentalness = db.Column(db.Float())
+    feature_danceability = db.Column(db.Float())
+    feature_energy = db.Column(db.Float())
+    feature_liveness = db.Column(db.Float())
+    feature_loudness = db.Column(db.Float())
+    feature_speechiness = db.Column(db.Float())
+    feature_valence = db.Column(db.Float())
+    feature_explicit = db.Column(db.Float())
+    target_peak = db.Column(db.Float())
+    target_weeks = db.Column(db.Float())
+
+    def __init__(self, feature_year):
+        self.feature_year = feature_year
+
+
+
 @app.route("/")
 def index():
     # graphJSON = create_plot()
+    features_by_year_JSON = by_year()
     # return render_template("index.html", graphJSON=graphJSON)
-    return render_template("index.html")
+    return render_template("index.html", features_by_year_JSON=features_by_year_JSON)
 
 
 @app.route("/lyrics/<userInput>", methods=["GET"])
@@ -186,6 +234,39 @@ def tennis_players():
     ]
     return {"players": results}
     
+@app.route("/features_by_year", methods=['GET'])
+def by_year():
+    global features_by_year_results
+    features_by_year = Byyear.query.all()
+    features_by_year_results = [
+        {
+            "year": year.feature_year,
+            "mode": year.feature_mode
+            # "acoustiness": year.feature_acoustiness,
+            # "instrumentalness": year.feature_instrumentalness,
+            # "danceability": year.feature_danceability,
+            # "energy": year.feature_energy,
+            # "liveness": year.feature_liveness,
+            # "speechiness": year.feature_speechiness,
+
+        } for year in features_by_year
+    ]
+    
+    year = features_by_year_results[0]["year"]
+    mode = features_by_year_results[0]["mode"]
+    df = pd.DataFrame({"year": year, "mode": mode}, index=[0])
+
+    data = [
+        go.Bar(
+            x = df["year"],
+            y = df["mode"]
+        )
+    ]
+
+    features_by_year_JSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return features_by_year_JSON
+
 
 if __name__ == "__main__":
     app.run(debug=True)

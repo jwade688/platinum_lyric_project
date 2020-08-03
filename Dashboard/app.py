@@ -68,21 +68,25 @@ def create_plot():
     graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
-def plot_features_by_year():
+def plot_features_by_year(feature):
     global features_by_year_results
-    year = features_by_year_results[0]["year"]
-    mode = features_by_year_results[0]["mode"]
-    
-    df = pd.DataFrame({"year": year, "mode": mode})
+
+    # Call function from route that retrieves values from database
+    # Returns list of dictionaries, each dictionary is one element (row)
+    features_by_year_results = by_year()
+
+    year = [element["year"] for element in features_by_year_results]
+    feature_values = [element[feature] for element in features_by_year_results]
 
     data = [
         go.Bar(
-            x = df["year"],
-            y = df["mode"]
+            x = year,
+            y = feature_values
         )
     ]
 
     features_by_year_JSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
+    
     return features_by_year_JSON
 
 
@@ -124,13 +128,9 @@ class Byyear(db.Model):
     def __init__(self, feature_year):
         self.feature_year = feature_year
 
-
-
 @app.route("/")
 def index():
-    # graphJSON = create_plot()
-    features_by_year_JSON = by_year()
-    # return render_template("index.html", graphJSON=graphJSON)
+    features_by_year_JSON = plot_features_by_year("acoustiness")
     return render_template("index.html", features_by_year_JSON=features_by_year_JSON)
 
 
@@ -237,35 +237,24 @@ def tennis_players():
 @app.route("/features_by_year", methods=['GET'])
 def by_year():
     global features_by_year_results
+
+    # Query database for all values from features_by_year table (defined in Byyear Class)
     features_by_year = Byyear.query.all()
     features_by_year_results = [
         {
             "year": year.feature_year,
-            "mode": year.feature_mode
-            # "acoustiness": year.feature_acoustiness,
-            # "instrumentalness": year.feature_instrumentalness,
-            # "danceability": year.feature_danceability,
-            # "energy": year.feature_energy,
-            # "liveness": year.feature_liveness,
-            # "speechiness": year.feature_speechiness,
+            "mode": year.feature_mode,
+            "acoustiness": year.feature_acoustiness,
+            "instrumentalness": year.feature_instrumentalness,
+            "danceability": year.feature_danceability,
+            "energy": year.feature_energy,
+            "liveness": year.feature_liveness,
+            "speechiness": year.feature_speechiness
 
         } for year in features_by_year
     ]
-    
-    year = features_by_year_results[0]["year"]
-    mode = features_by_year_results[0]["mode"]
-    df = pd.DataFrame({"year": year, "mode": mode}, index=[0])
 
-    data = [
-        go.Bar(
-            x = df["year"],
-            y = df["mode"]
-        )
-    ]
-
-    features_by_year_JSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
-
-    return features_by_year_JSON
+    return features_by_year_results
 
 
 if __name__ == "__main__":

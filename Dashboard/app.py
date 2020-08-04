@@ -28,6 +28,7 @@ model_dict = {}
 genre = ""
 prediction = ""
 features_by_year_results = []
+selected_feature = "mode"
 
 def lyrics_BoW(lyrics):
     global model_dict
@@ -69,14 +70,20 @@ def create_plot():
     return graphJSON
 
 def plot_features_by_year(feature):
+    print("Entering plot_features_by_year() function")
     global features_by_year_results
-
+    # When user changes feature in dropdown, function (from route feature_select) that retrieves
+    # user's feature selection runs and updates selected_feature variable
+    print(f"Selected feature (plot_features_by_year() function): {selected_feature}")
     # Call function from route that retrieves values from database
     # Returns list of dictionaries, each dictionary is one element (row)
     features_by_year_results = by_year()
-
+    print(f"features_by_year_results from by_year() function: {features_by_year_results}")
+    print(feature)
     year = [element["year"] for element in features_by_year_results]
+    # feature_values = [element[feature] for element in features_by_year_results]
     feature_values = [element[feature] for element in features_by_year_results]
+
 
     data = [
         go.Bar(
@@ -130,7 +137,9 @@ class Byyear(db.Model):
 
 @app.route("/")
 def index():
-    features_by_year_JSON = plot_features_by_year("acoustiness")
+    global selected_feature
+    print(f"Selected feature: {selected_feature}")
+    features_by_year_JSON = plot_features_by_year(selected_feature)
     return render_template("index.html", features_by_year_JSON=features_by_year_JSON)
 
 
@@ -233,11 +242,28 @@ def tennis_players():
         } for player in players
     ]
     return {"players": results}
+
+@app.route("/feature_select/<userInput>", methods=["GET"])
+def input_feature(userInput=None):
+    print("Entering input_feature() function in /feature_select route")
     
-@app.route("/features_by_year", methods=['GET'])
+    global selected_feature
+    response = jsonify(userInput)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    selected_feature = json.dumps(userInput).strip('"')
+    
+    print(f"Selected feature (input_feature() function): {selected_feature}")
+
+    # Call plot function to create plot using selected_feature variable
+    features_by_year_JSON = plot_features_by_year(selected_feature)
+
+    return render_template("index.html", features_by_year_JSON=features_by_year_JSON)
+    # return response
+
+@app.route("/features_by_year")
 def by_year():
     global features_by_year_results
-
+    print("Entering by_year() function in /features_by_year route to pull from Postgres")
     # Query database for all values from features_by_year table (defined in Byyear Class)
     features_by_year = Byyear.query.all()
     features_by_year_results = [
@@ -253,7 +279,7 @@ def by_year():
 
         } for year in features_by_year
     ]
-
+    print("Returning features_by_year_results from by_year() function")
     return features_by_year_results
 
 

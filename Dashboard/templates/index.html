@@ -72,7 +72,7 @@
       <div class="col-md-3">
         <div class="form-group">
           <!-- <form action="http://localhost:5000/genre" method="POST"> -->
-            <select class="form-control" id="genreSelect" placeholder="Select Genre" onchange="optionChanged(this.value)">
+            <select class="form-control" id="genreSelect" placeholder="Select Genre" onchange="genreChanged(this.value)">
             <!-- <select class="form-control" name="selectGenre" id="genreSelect" placeholder="Select Genre"> -->
               <option selected>Select genre</option>
               <option>Rock</option>
@@ -82,7 +82,7 @@
             </select>
           <!-- </form> -->
           <script type="text/javascript">
-            function optionChanged(userOption) {
+            function genreChanged(userOption) {
               d3.json("http://127.0.0.1:5000/genre/"+userOption).then(function(data) {
                   console.log(data)
                 });
@@ -139,8 +139,31 @@
     </div>
 
     <div class="row pl-5 pr-5 pt-4">
+      
       <div class="col-md-6">
         <h3>Chart</h3>
+        <div class="form-group">
+          <!-- <form action="http://localhost:5000/genre" method="POST"> -->
+            <select class="form-control" id="featureSelect" placeholder="Select Feature" onchange="featureChanged(this.value)">
+            <!-- <select class="form-control" name="selectGenre" id="genreSelect" placeholder="Select Genre"> -->
+              <option selected>Select feature</option>
+              <option>mode</option>
+              <option>acoustiness</option>
+              <option>instrumentalness</option>
+              <option>danceability</option>
+              <option>energy</option>
+              <option>liveness</option>
+              <option>speechiness</option>
+            </select>
+          <!-- </form> -->
+          <script type="text/javascript">
+            function featureChanged(userOption) {
+              d3.json("http://127.0.0.1:5000/feature_select/"+userOption).then(function(data) {
+                  console.log(data)
+                });
+            };
+          </script>
+        </div>
         <div id="bargraph">
           <script type="text/javascript">
             var graphs = {{features_by_year_JSON | safe}};

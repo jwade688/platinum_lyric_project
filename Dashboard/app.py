@@ -78,7 +78,7 @@ def plot_features_by_year(feature):
     # Call function from route that retrieves values from database
     # Returns list of dictionaries, each dictionary is one element (row)
     features_by_year_results = by_year()
-    print(f"features_by_year_results from by_year() function: {features_by_year_results}")
+    print(f"plot_features_by_year()--> features_by_year_results from by_year() function: {features_by_year_results}")
     print(feature)
     year = [element["year"] for element in features_by_year_results]
     # feature_values = [element[feature] for element in features_by_year_results]
@@ -96,6 +96,65 @@ def plot_features_by_year(feature):
     
     return features_by_year_JSON
 
+def plot_bubble_chart():
+    print("Entering plot_bubble_chart() function.")
+    global features_by_year_results
+    print(f"plot_bubble_chart()--> features_by_year_results: {features_by_year_results}")
+
+    # features_by_year_results = by_year()
+    year = [element["year"] for element in features_by_year_results]
+    energy = [element["energy"] for element in features_by_year_results]
+    acoustiness = [element["acoustiness"] for element in features_by_year_results]
+    loudness = [element["loudness"] for element in features_by_year_results]
+
+    # graph = [
+    #     dict(
+    #         data = go.Scatter[
+    #             dict(
+    #                 x = year,
+    #                 y = loudness,
+    #                 mode = "markers",
+    #                 marker = dict(
+    #                     size = [n*100 for n in energy],
+    #                     color = acoustiness,
+    #                     colorscale='Viridis'
+    #                     )
+    #             )
+    #         ],
+
+    #         layout = dict(
+    #             title = 'Bubble Chart Title',
+    #             xaxis_title = "X Axis Title",
+    #             yaxis_title = "X Axis Title"
+    #         )
+    #     )
+    # ]
+
+
+    data = [
+        go.Scatter(
+            x = year,
+            y = loudness,
+            mode = "markers",
+            marker = dict(
+                size = [n*100 for n in energy],
+                color = acoustiness,
+                colorscale='Viridis'
+                )
+        )
+    ]
+
+    # layout = dict(
+    #             title = 'Bubble Chart Title',
+    #             xaxis_title = "X Axis Title",
+    #             yaxis_title = "X Axis Title"
+    #         )
+
+    bubble_chart_JSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
+
+    print(f"Return bubble_chart_JSON: {bubble_chart_JSON}")
+
+    return bubble_chart_JSON
 
 class Players(db.Model):
     __tablename__ = 'players'
@@ -140,7 +199,10 @@ def index():
     global selected_feature
     print(f"Selected feature: {selected_feature}")
     features_by_year_JSON = plot_features_by_year(selected_feature)
-    return render_template("index.html", features_by_year_JSON=features_by_year_JSON)
+    bubble_chart_JSON = plot_bubble_chart()
+    print("Back to route /")
+    print(f"Return bubble_chart_JSON from route /: {bubble_chart_JSON}")
+    return render_template("index.html", features_by_year_JSON=features_by_year_JSON, bubble_chart_JSON=bubble_chart_JSON)
 
 
 @app.route("/lyrics/<userInput>", methods=["GET"])
@@ -230,18 +292,6 @@ def run_model():
 
         # return jsonify(prediction)
     return render_template("index.html", prediction=prediction)
-    
-
-@app.route("/tennis_players", methods=['GET'])
-def tennis_players():
-    players = Players.query.all()
-    results = [
-        {
-            "id": player.player_id,
-            "name": player.first_name
-        } for player in players
-    ]
-    return {"players": results}
 
 @app.route("/feature_select/<userInput>", methods=["GET"])
 def input_feature(userInput=None):
@@ -275,12 +325,14 @@ def by_year():
             "danceability": year.feature_danceability,
             "energy": year.feature_energy,
             "liveness": year.feature_liveness,
+            "loudness": year.feature_loudness,
             "speechiness": year.feature_speechiness
 
         } for year in features_by_year
     ]
     print("Returning features_by_year_results from by_year() function")
     return features_by_year_results
+
 
 
 if __name__ == "__main__":

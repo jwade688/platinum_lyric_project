@@ -139,7 +139,19 @@
     </div>
 
     <div class="row pl-5 pr-5 pt-4">
-      
+      <div class="col-md-12">
+        <h3>Bubble Chart</h3>
+        <div id="bubblechart">
+          <script type="text/javascript">
+            var graph = {{bubble_chart_JSON | safe}};
+            // Plotly.plot('bubblechart', graph[0].data, graph[0].layout || {});
+            Plotly.plot('bubblechart', graph || {});            
+          </script>
+        </div>
+      </div>
+    </div>
+
+    <div class="row pl-5 pr-5 pt-4">
       <div class="col-md-6">
         <h3>Chart</h3>
         <div class="form-group">
@@ -166,8 +178,8 @@
         </div>
         <div id="bargraph">
           <script type="text/javascript">
-            var graphs = {{features_by_year_JSON | safe}};
-            Plotly.plot('bargraph',graphs || {});
+            var graph = {{features_by_year_JSON | safe}};
+            Plotly.react('bargraph',graph || {});
           </script>
         </div>
       </div>

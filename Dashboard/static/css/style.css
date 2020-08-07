@@ -2,17 +2,91 @@ body {
     color: #ffffff;
 }
 
-/* .row-title {
-    margin-left: 15px;
-} */
+.subtitle-text {
+    font-size: 1.25rem !important;
+    font-weight: 300 !important;
+}
+
+a:link {
+    color: white !important;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a:hover {
+    color: peachpuff !important;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a:active {
+    color: peachpuff !important;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a:visited {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
 
 .jumbotron {
     /* background-image: url("../images/nasa.jpg"); */
-    background-color: #4f5357;
-    background-size: 100% 100%;
-    text-align: center;
+    /* background-color: #4f5357; */
+    /* background-color: #343A40; */
+    /* background-size: 100% 100%; */
+    background-color: transparent;
+    padding-top: 260px;
+    padding-bottom: 260px;
+    text-align: center
+}
+
+.main-title {
+    font-weight: 600
 }
 
 .bg-dark {
     border: 1px #343A40
+}
+
+.run-btn {
+    border-radius: 20px;
+    margin-top: 10px !important;
+    max-width: 160px !important;
+    min-width: 10rem;
+    align-items: flex-end;
+}
+
+.main-btn {
+    margin-top: 20px;
+    width: 16rem;
+    min-height: 47px;
+    border-radius: 22px;
+    padding: 8px 10px;
+    font-weight: bold
+}
+
+.first-block {
+    padding-bottom: 8rem;
+    background-size: 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: unset;
+    background-size: cover;
+    background-color: #343A40;
+}
+
+.second-block {
+    background-color: #343A40;
+    padding-top: 5rem !important;
+}
+
+.second-block-title {
+    text-align: left;
 }

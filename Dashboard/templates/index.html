@@ -13,74 +13,140 @@
   integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
   crossorigin="anonymous"
   />
-  <link rel="stylesheet" href="static/css/style.css">
+  <!-- <link rel="stylesheet" type="text/css" href="../static/css/style.css"> -->
+  <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
-  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+
+  <!-- https://www.w3schools.com/howto/howto_css_smooth_scroll.asp#section2 -->
+  <script>
+    $(document).ready(function(){
+      // Add smooth scrolling to all links
+      $("a").on('click', function(event) {
+    
+        // Make sure this.hash has a value before overriding default behavior
+        if (this.hash !== "") {
+          // Prevent default anchor click behavior
+          event.preventDefault();
+    
+          // Store hash
+          var hash = this.hash;
+    
+          // Using jQuery's animate() method to add smooth page scroll
+          // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+          $('html, body').animate({
+            scrollTop: $(hash).offset().top
+          }, 800, function(){
+       
+            // Add hash (#) to URL when done scrolling (default click behavior)
+            window.location.hash = hash;
+          });
+        } // End if
+      });
+    });
+  </script>
+
+  <!-- Set a global variable SCRIPT_ROOT to the prefix to the root of the application -->
+  <script type=text/javascript>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+ 
+  <!-- <script type="text/javascript">
+    $(function() {
+      $('a#run-btn').bind('click', function() {
+        $.getJSON($SCRIPT_ROOT + '/get_lyrics', {
+          testing: $(input[name='testing']).val()
+        }, function(data) {
+          $('#receive-pred').text(data.result);
+        });
+        return false;
+      });
+    });
+  </script>
+ -->
+
+
+
+
+  <!-- <script type="text/javascript">
+  function getPrediction() {
+    $.getJSON("/model_predict", function(data) {
+      $('receive-pred').text(data.value)
+    });
+  };
+  </script> -->
+
 
 </head>
 
-<body class="bg-dark">
+<body class="bg-dark body">
   <div class="container-fluid">
-    <div class="row">
+    <div class="row first-block pl-5 pr-5" style="background-image: url('../static/images/Background_1.png');">
       <div class="col-md-12 jumbotron text-center jumbotron-fluid">
-        <h1 class="display-4">The Platinum Lyric Project</h1>
-        <p class="lead">Use the interactive charts below to explore the dataset</p>
-        <!-- <h3 class="text-muted">Use the interactive charts below to explore the dataset</h3> -->
+        <h1 class="display-4 main-title">The Platinum Lyric Project</h1>
+        <p class="lead">Can a song’s lyrics predict its success?</p>
+        <a href="#enter-lyrics">
+          <button type="button" class="btn btn-info main-btn">Try it out!</button>
+        </a>
       </div>
-    </div>
 
-    <div class="row row-title pl-5">
-      <div class="col-md-7">
-        <h2>Enter song lyrics below to find out if it will be a hit or not</h2>
+      <div class="col-md-12 pb-3" id="enter-lyrics"></div>
+      <div class="col-md-12">
+        <h2 class="pt-5 pb-2">Enter song lyrics below to find out if it will be a hit or not</h2>
+        <p class="lead">The lyrics of your song will be compared to our dataset of 41k+ songs to determine its likelihood of achieving success.</p>
+        <p class="lead pb-5">Our metric of success was defined as the song having reached <a href="https://www.billboard.com/charts/hot-100" target="_blank">Billboard's top 100 Chart</a> and remained there for at least one week.</p>
       </div>
-      <div class="col-md-5">
-      </div>
-    </div>
-    <hr class="my-4">
+      
 
-    <div class="row pb-4">
-
-      <div class="col-md-6 pl-5">
+      <div class="col-md-6">
         <form>
           <div class="form-group">
-            <textarea class="form-control form-control-lg" id="lyricsInput" rows="9" placeholder="Enter song lyrics here" onchange="getText()"></textarea>
+            <textarea class="form-control form-control-lg pb-3" id="lyricsInput" name="get-lyrics" rows="9" placeholder="Enter song lyrics here"></textarea>
+            <button type="button" class="btn btn-dark run-btn" id="run-btn">Run</button>
             <script type="text/javascript">
-              function getText() {
-                // Get user input and replace line breaks with spaces
-                var lyrics = document.getElementById("lyricsInput").value.replace(/\n/g, " ");
-
-                d3.json("http://127.0.0.1:5000/lyrics/"+lyrics).then(function(data) {
-                  console.log(data)
+              $(function() {
+                $("#run-btn").click(function() {
+                  $.ajax({
+                    type: "GET",
+                    url: $SCRIPT_ROOT + "/get_lyrics",
+                    contentType: "application/json; charset=utf-8",
+                    success: function(data) {
+                      if(data.result == "True") {
+                        $('#success-msg').show();
+                        $('#not-success-msg').hide();
+                        $('#neutral-msg').hide()
+                      } else if (data.result == "False") {
+                        $('#success-msg').hide();
+                        $('#not-success-msg').show();
+                        $('#neutral-msg').hide()
+                      } else {
+                        $('#success-msg').hide();
+                        $('#not-success-msg').hide();
+                        $('#neutral-msg').show()
+                      }
+                    }
+                  });
                 });
-                // d3.json("http://127.0.0.1:5000/lyrics/"+lyrics, {
-                // method:"GET",
-                // body: JSON.stringify(lyrics)
-                // })
-                // return lyrics
-              };
-
-              // d3.select("#runModel").on("click", function() {
-                // d3.select("#lyricsInput").style("background-color", "blue")
-              // });
-            </script>
+              });
+              </script>
           </div>
         </form>
       </div>
-      
-      <div class="col-md-3">
+        
+      <!-- <div class="col-md-3">
         <div class="form-group">
-          <!-- <form action="http://localhost:5000/genre" method="POST"> -->
             <select class="form-control" id="genreSelect" placeholder="Select Genre" onchange="genreChanged(this.value)">
-            <!-- <select class="form-control" name="selectGenre" id="genreSelect" placeholder="Select Genre"> -->
               <option selected>Select genre</option>
               <option>Rock</option>
               <option>Pop</option>
               <option>Country</option>
               <option>Something Else</option>
             </select>
-          <!-- </form> -->
           <script type="text/javascript">
             function genreChanged(userOption) {
               d3.json("http://127.0.0.1:5000/genre/"+userOption).then(function(data) {
@@ -89,63 +155,45 @@
             };
           </script>
         </div>
-        <div class="form-group">
-          <select class="form-control" id="somethingElseSelect" placeholder="Select Genre">
-            <option selected>Select Something Else</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-          </select>
-        </div>
-        <form action="http://localhost:5000/runmodel" method="post">
-          <input type="submit" class="btn btn-secondary btn-block" id="runModel" value="Run" style="border-radius: 20px"/>
-        </form>
+      </div> -->
 
-        <!-- <script type="text/javascript">
-          $.ajax({
-            type : "POST",
-            url : '/runmodel',
-            dataType: "json",
-            data: JSON.stringify(this.value),
-            contentType: 'application/json;charset=UTF-8',
-            success: function (data) {
-              console.log(data);
-              }
-            });
-        </script> -->
-      </div>
-
-      <div class="col-md-3 pr-5">
-        {% if prediction==1 %}
-        <div class="alert alert-success" role="alert">
+      <div class="col-md-6" id="model-prediction">
+        <div class="alert alert-success" id="success-msg" role="alert" style="display: none;">
           <h4 class="alert-heading">This song will be a Hit!</h4>
           <hr>
           <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
           <button type="button" class="btn btn-secondary" style="border-radius: 20px">Test another one!</button>
         </div>
-        {% elif prediction==0 %}
-        <div class="alert alert-warning" role="alert">
+
+        <div class="alert alert-warning" id="not-success-msg" role="alert" style="display: none;">
           <h4 class="alert-heading">This song will not be a Hit...</h4>
           <hr>
           <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
-          <button type="button" class="btn btn-secondary" style="border-radius: 20px">Test another one!</button>
+          <button type="button" id="before-run-msg" class="btn btn-secondary" style="border-radius: 20px">Test another one!</button>
         </div>
-        {% else %}
-        <h4>Run the model to get your prediction</h4>
-        {% endif %}
+
+        <div class="alert alert-secondary" id="neutral-msg" role="alert" style="display: block;">
+          <h4 class="alert-heading">Run the model to get your prediction</h4>
+          <hr>
+          <p>You successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+        </div>
       </div>
-
     </div>
+    
 
-    <div class="row pl-5 pr-5 pt-4">
+<!--     
+    <div class="row pb-4 pl-5 pr-5 pb-5">
+      
+    </div> -->
+
+    <div class="row second-block pl-5 pr-5 pt-5 pb-5">
       <div class="col-md-12">
-        <h3>Bubble Chart</h3>
+        <h1 class="display-4 main-title second-block-title">Explore historical data</h1>
         <div id="bubblechart">
           <script type="text/javascript">
             var graph = {{bubble_chart_JSON | safe}};
             // Plotly.plot('bubblechart', graph[0].data, graph[0].layout || {});
-            Plotly.plot('bubblechart', graph || {});            
+            Plotly.plot('bubblechart', graph[0], graph[1] || {});            
           </script>
         </div>
       </div>

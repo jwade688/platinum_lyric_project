@@ -180,6 +180,17 @@ def get_lyrics():
     return jsonify(result=prediction)
     
 
+@app.route("/wordcloud_genre")
+def get_wordcloud_genre():
+    print("Entering /wordcloud_genre route")
+    # Retrieve user input containing first genre selection, referencing field's "name"
+    first_genre = request.args.get('first-genre', 0, type=str)
+    first = json.dumps(first_genre)
+    # Retrieve user input containing first genre selection, referencing field's "name"
+    second_genre = request.args.get('second-genre', 0, type=str)
+    second = json.dumps(second_genre)
+    
+
 # @app.route("/genre/<userInput>", methods=["GET"])
 # def input_genre(userInput=None):
 #     global genre

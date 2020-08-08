@@ -55,21 +55,28 @@ p {
     border: 1px #343A40
 }
 
-.run-btn {
-    border-radius: 20px;
-    margin-top: 10px !important;
-    max-width: 160px !important;
-    min-width: 10rem;
-    align-items: flex-end;
-}
-
 .main-btn {
     margin-top: 20px;
     width: 16rem;
     min-height: 47px;
     border-radius: 22px;
     padding: 8px 10px;
-    font-weight: bold
+    font-weight: bold;
+    margin-top: 2.5rem
+}
+
+.run-btn {
+    border-radius: 20px;
+    margin-top: 10px !important;
+    max-width: 160px !important;
+    min-width: 10rem;
+    align-items: flex-end;
+    float: right;
+}
+
+.alert-btn {
+    border-radius: 20px;
+    margin-top: 20px;
 }
 
 .first-block {
@@ -82,11 +89,19 @@ p {
     background-color: #343A40;
 }
 
-.second-block {
+.dark-block {
     background-color: #343A40;
-    padding-top: 5rem !important;
+    /* padding-top: 4.5rem !important; */
+    padding-bottom: 5rem !important;
 }
 
 .second-block-title {
     text-align: left;
+    padding-bottom: 1rem;
+}
+
+.light-block {
+    background-color: gainsboro;
+    padding-bottom: 5rem !important;
+    color: dimgray;
 }

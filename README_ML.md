@@ -60,6 +60,14 @@ We chose the Naive Bayes models for the following reasons:
   
   -- The GaussianNB Naive Bayes Classifier - this algorithm is the most common Naive Bayes algorithm which 
   assumes a normal distribution in classes. 
+
+  - Additional Model: Deep Learning Model
+
+Lastly, we experimented with an ANN model to compare its accuracy with our other models. The ANN seems to perform pretty well on our dataset and we suspect that is because we have a very complex and wide feature set. However this model has its own limitations:
+
+-- It is even harder to interpret.
+-- It doesn't make predictions as quickly (and so far we have not figured out how we could save/ pickle it)
+-- It is prone to overfit.
   
 ## References
 

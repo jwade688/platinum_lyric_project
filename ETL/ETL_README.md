@@ -28,7 +28,7 @@ liveness, loudness, mode, popularity, speechiness, tempo, valence)
 - Extract & Clean: Jupyter Notebook
 - Load to Postgres (after creating the tables first)
 - Transform/Join tables in Postgres
-- Final Tables avilable from Postgres, and exported as csv files
+- Final Tables available in Postgres/RDS, and exported as csv files available in Amazon S3
 
 
 1- lyrics_pivot_load.ipynb

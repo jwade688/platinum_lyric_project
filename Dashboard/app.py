@@ -56,7 +56,7 @@ def lyrics_BoW(lyrics):
             model_dict[word] += 1
     
     # Feed model_dict into ML Model, returning prediction
-    print(f"Result from lyrics_BoW: {model_dict}")
+    # print(f"Result from lyrics_BoW: {model_dict}")
 
     prediction = "True"
 
@@ -166,13 +166,13 @@ def index():
     return render_template("index.html", features_by_year_JSON=features_by_year_JSON, bubble_chart_JSON=bubble_chart_JSON)
 
 
-
-@app.route("/get_lyrics")
+@app.route("/get_lyrics", methods=["GET", "POST"])
 def get_lyrics():
     global prediction
     print("Entering /get_lyrics route")
     # Retrieve user input containing lyrics
-    lyrics_input = request.args.get('get-lyrics', 0, type=str)
+    lyrics_input = request.args.get('userLyrics', 0, type=str)
+    print(f"lyrics_input: {lyrics_input}")
     lyrics = json.dumps(lyrics_input)
     # Call lyrics_BoW function to process lyrics and run ML model, returning prediction
     prediction = lyrics_BoW(lyrics)
@@ -180,16 +180,32 @@ def get_lyrics():
     return jsonify(result=prediction)
     
 
-@app.route("/wordcloud_genre")
-def get_wordcloud_genre():
-    print("Entering /wordcloud_genre route")
-    # Retrieve user input containing first genre selection, referencing field's "name"
-    first_genre = request.args.get('first-genre', 0, type=str)
-    first = json.dumps(first_genre)
-    # Retrieve user input containing first genre selection, referencing field's "name"
-    second_genre = request.args.get('second-genre', 0, type=str)
-    second = json.dumps(second_genre)
-    
+@app.route("/chart_feature_select", methods=["GET", "POST"])
+def dropdown_feature():
+    print("Entering /chart_feature_select")
+    global selected_feature
+    # Retrieve user input containing feature selection from the dropdown
+    # If the key is missing a default value (here "mode") is returned
+    feature_input = request.args.get('userFeatureSelect', 0, type=str)
+    print(f"feature_input: {feature_input}")
+    # selected_feature = json.dumps(feature_input)
+    print(f"Selected feature: {selected_feature}")
+    # Call plot function to create plot using selected_feature variable
+    features_by_year_JSON = plot_features_by_year(feature_input)
+
+    return jsonify(result=features_by_year_JSON)
+
+
+# @app.route("/wordcloud_genre")
+# def get_wordcloud_genre():
+#     print("Entering /wordcloud_genre route")
+#     # Retrieve user input containing first genre selection, referencing field's "name"
+#     first_genre = request.args.get('first-genre', 0, type=str)
+#     first = json.dumps(first_genre)
+#     # Retrieve user input containing first genre selection, referencing field's "name"
+#     second_genre = request.args.get('second-genre', 0, type=str)
+#     second = json.dumps(second_genre)
+
 
 # @app.route("/genre/<userInput>", methods=["GET"])
 # def input_genre(userInput=None):
@@ -209,11 +225,12 @@ def input_feature(userInput=None):
     response.headers.add("Access-Control-Allow-Origin", "*")
     selected_feature = json.dumps(userInput).strip('"')
     
-        # Call plot function to create plot using selected_feature variable
+    # Call plot function to create plot using selected_feature variable
     features_by_year_JSON = plot_features_by_year(selected_feature)
 
     return render_template("index.html", features_by_year_JSON=features_by_year_JSON)
     # return response
+
 
 @app.route("/features_by_year")
 def by_year():

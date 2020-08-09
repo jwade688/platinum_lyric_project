@@ -20,8 +20,8 @@
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
   <!-- <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script> -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
   <!-- https://www.w3schools.com/howto/howto_css_smooth_scroll.asp#section2 -->
   <script>
@@ -108,29 +108,27 @@
           <div class="form-group">
             <textarea class="form-control form-control-lg pb-3" id="lyricsInput" name="get-lyrics" rows="9" placeholder="Enter song lyrics here"></textarea>
             <button type="button" class="btn btn-dark run-btn" id="run-btn">Run</button>
-            <script type="text/javascript">
+            <script type="text/javascript">                          
               $(function() {
                 $("#run-btn").click(function() {
-                  $.ajax({
-                    type: "GET",
-                    url: $SCRIPT_ROOT + "/get_lyrics",
-                    contentType: "application/json; charset=utf-8",
-                    success: function(data) {
-                      if(data.result == "True") {
-                        $('#success-msg').show();
-                        $('#not-success-msg').hide();
-                        $('#neutral-msg').hide()
-                      } else if (data.result == "False") {
-                        $('#success-msg').hide();
-                        $('#not-success-msg').show();
-                        $('#neutral-msg').hide()
-                      } else {
-                        $('#success-msg').hide();
-                        $('#not-success-msg').hide();
-                        $('#neutral-msg').show()
-                      }
+                  var userLyricsInput = $("textarea[name='get-lyrics']").val();
+                  var routeLyrics = $SCRIPT_ROOT + "/get_lyrics";
+
+                  $.get( routeLyrics, { userLyrics: userLyricsInput }, function(data) {
+                    if(data.result == "True") {
+                      $('#success-msg').show();
+                      $('#not-success-msg').hide();
+                      $('#neutral-msg').hide()
+                    } else if (data.result == "False") {
+                      $('#success-msg').hide();
+                      $('#not-success-msg').show();
+                      $('#neutral-msg').hide()
+                    } else {
+                      $('#success-msg').hide();
+                      $('#not-success-msg').hide();
+                      $('#neutral-msg').show()
                     }
-                  });
+                }, "json");
                 });
               });
               </script>
@@ -183,9 +181,7 @@
       </div>
       <div class="col-md-6">
         <div class="form-group">
-          <!-- <form action="http://localhost:5000/genre" method="POST"> -->
-            <select class="form-control dropdown" id="featureSelect" placeholder="Select Feature" onchange="featureChanged(this.value)">
-            <!-- <select class="form-control" name="selectGenre" id="genreSelect" placeholder="Select Genre"> -->
+            <select class="form-control dropdown" id="feature-select" name="feature-dropdown" placeholder="Select Feature">
               <option selected>Select feature</option>
               <option>mode</option>
               <option>acoustiness</option>
@@ -195,14 +191,29 @@
               <option>liveness</option>
               <option>speechiness</option>
             </select>
-          <!-- </form> -->
+
           <script type="text/javascript">
+            $(function() {
+              $("#feature-select").change(function() {
+                var userFeatureSelection = $("select[name='feature-dropdown']").val();
+                var routeFeature = $SCRIPT_ROOT + "/chart_feature_select";
+
+                $.get( routeFeature, { userFeatureSelect: userFeatureSelection }, function(data) {
+                  console.log(data)
+                  Plotly.react('bargraph',data.result || {});
+                });
+              });
+            });
+
+          </script>
+          
+          <!-- <script type="text/javascript">
             function featureChanged(userOption) {
               d3.json("http://127.0.0.1:5000/feature_select/"+userOption).then(function(data) {
                   console.log(data)
                 });
             };
-          </script>
+          </script> -->
         </div>
         <div id="bargraph">
           <script type="text/javascript">
@@ -210,6 +221,7 @@
             Plotly.react('bargraph',graph || {});
           </script>
         </div>
+
       </div>
     </div>
 

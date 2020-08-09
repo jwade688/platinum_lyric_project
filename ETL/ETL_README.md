@@ -104,6 +104,11 @@ liveness, loudness, mode, popularity, speechiness, tempo, valence)
 
 	- import the different tables into dataframes, and rename the name columns (dropping "word-...")
 	- export them to csv files
-			
+
+7- Final .csv files available on Amazon S3
+
+	- https://platinum-lyric-bucket.s3.us-east-2.amazonaws.com/platinum_lyrics.csv
+	- https://platinum-lyric-bucket.s3.us-east-2.amazonaws.com/platinum_lyrics_features.csv
+	- https://platinum-lyric-bucket.s3.us-east-2.amazonaws.com/platinum_features.csv
 
 

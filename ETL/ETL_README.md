@@ -40,7 +40,6 @@ liveness, loudness, mode, popularity, speechiness, tempo, valence)
 	- remove all non-English words, then stop-words, then words appearing the least in the table
 	- rename all word columns (adding "word_..." to each) to avoid conflict with Postgres expressions
 	- after connecting to Platinum_Lyrics Database in Postgres, pivot table gets exported - which may last between 1 and several hours - to pivot table
-	- export the main lyrics.csv, and words.csv - not necessary as of no use
 
 2- Billboard_db_cleanup_load.ipynb
 

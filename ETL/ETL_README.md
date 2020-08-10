@@ -29,7 +29,7 @@ liveness, loudness, mode, popularity, speechiness, tempo, valence)
 
 	https://platinum-lyric-bucket.s3.us-east-2.amazonaws.com/Resources/data_w_genres.csv
 
-### Goal: 3 final tables
+### End Result: 3 final tables
 
 - platinum_lyrics: track_id, artist_name, song_title, song_year, target_success, target_peak, target_weeks, and word columns
 - platinum_lyrics_features: track_id, artist_name, song_title, song_year, target_success, target_peak, target_weeks, and word columns + feature columns

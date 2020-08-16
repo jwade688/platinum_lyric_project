@@ -157,9 +157,9 @@ def plot_unique_words_bubble():
     global top_wordfreq_df
     # Get word frequencies of top 100 successful and unsuccessful songs
     top100_s = top_wordfreq_df.sort_values('freq in successful', ascending=False).iloc[:100]['words'].to_list()
-    top100_u = top_wordfreq_df.sort_values('freq in unsuccessful', ascending=False).iloc[:102]['words'].to_list()
+    top100_u = top_wordfreq_df.sort_values('freq in unsuccessful', ascending=False).iloc[:101]['words'].to_list()
     top100_u.remove("que")
-    top100_u.remove("nigga")
+    # top100_u.remove("nigga")
     # Get unique words in successful and unsuccessful songs
     top100_s_unique = [word for word in top100_s if word not in top100_u]
     top100_u_unique = [word for word in top100_u if word not in top100_s]
@@ -239,15 +239,21 @@ def index():
     # print(f"Return bubble_chart_JSON from route /: {bubble_chart_JSON}")
     # return render_template("index.html", features_by_year_JSON=features_by_year_JSON, bubble_chart_JSON=bubble_chart_JSON)
     # return render_template("index.html")
-    return render_template("index.html", features_by_year_JSON=features_by_year_JSON, data_JSON=data_JSON, freq_JSON=freq_JSON, unique_JSON=unique_JSON)
-
+    # return render_template("index.html", features_by_year_JSON=features_by_year_JSON, data_JSON=data_JSON, freq_JSON=freq_JSON, unique_JSON=unique_JSON)
+    return render_template(
+        "index.html",
+        features_by_year_JSON=features_by_year_JSON,
+        data_JSON=data_JSON,
+        freq_JSON=freq_JSON,
+        unique_JSON=unique_JSON
+    )
 
 @app.route("/get_lyrics", methods=["GET", "POST"])
 def get_lyrics():
     print("Entering /get_lyrics route")
     # Retrieve user input containing lyrics
     lyrics_input = request.args.get('userLyrics', 0, type=str)
-    print(f"lyrics_input received in /get_lyrics route: {lyrics_input}")
+    # print(f"lyrics_input received in /get_lyrics route: {lyrics_input}")
     # Call lyrics_BoW function to process lyrics and run ML model, returning prediction
     prediction = lyrics_BoW(lyrics_input)
     print(f"Prediction from /get_lyrics route: {prediction}")

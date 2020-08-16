@@ -102,6 +102,7 @@
         <p class="lead pb-5">Our metric of success was defined as the song having reached <a href="https://www.billboard.com/charts/hot-100" target="_blank">Billboard's top 100 Chart</a> and remained there for at least one week.</p>
       </div>
       
+      
 
       <div class="col-md-6">
         <form>
@@ -114,7 +115,7 @@
                   var userLyricsInput = $("textarea[name='get-lyrics']").val();
                   var routeLyrics = $SCRIPT_ROOT + "/get_lyrics";
 
-                  $.get( routeLyrics, { userLyrics: userLyricsInput }, function(data) {
+                  $.get(routeLyrics, { userLyrics: userLyricsInput }, function(data) {
                     if(data.result == "True") {
                       $('#success-msg').show();
                       $('#not-success-msg').hide();
@@ -165,21 +166,21 @@
         <p class="lead">The lyrics of your song will be compared to our dataset of 41k+ songs to determine its likelihood of achieving success.</p>
         <p class="lead pb-5">Our metric of success was defined as the song having reached <a href="https://www.billboard.com/charts/hot-100" target="_blank">Billboard's top 100 Chart</a> and remained there for at least one week.</p>
         <div id="bubblechart">
-          <script type="text/javascript">
+          <!-- <script type="text/javascript">
             var graph = {{bubble_chart_JSON | safe}};
             // Plotly.plot('bubblechart', graph[0].data, graph[0].layout || {});
             Plotly.plot('bubblechart', graph[0], graph[1] || {});            
-          </script>
+          </script> -->
         </div>
       </div>
     </div>
 
     <div class="row light-block pl-5 pr-5 pt-5 pb-5">
-      <div class="col-md-12">
+      <!-- <div class="col-md-12">
         <h1 class="display-4 main-title second-block-title">Features by Year</h1>
         <p class="lead pb-5">The lyrics of your song will be compared to our dataset of 41k+ songs to determine its likelihood of achieving success.</p>
-      </div>
-      <div class="col-md-6">
+      </div> -->
+      <!-- <div class="col-md-6">
         <div class="form-group">
             <select class="form-control dropdown" id="feature-select" name="feature-dropdown" placeholder="Select Feature">
               <option selected>Select feature</option>
@@ -197,31 +198,88 @@
               $("#feature-select").change(function() {
                 var userFeatureSelection = $("select[name='feature-dropdown']").val();
                 var routeFeature = $SCRIPT_ROOT + "/chart_feature_select";
-
                 $.get( routeFeature, { userFeatureSelect: userFeatureSelection }, function(data) {
                   console.log(data)
-                  Plotly.react('bargraph',data.result || {});
+                  Plotly.plot('bargraph',data.result || {});
                 });
               });
             });
-
           </script>
-          
-          <!-- <script type="text/javascript">
-            function featureChanged(userOption) {
-              d3.json("http://127.0.0.1:5000/feature_select/"+userOption).then(function(data) {
-                  console.log(data)
-                });
-            };
-          </script> -->
         </div>
+
         <div id="bargraph">
           <script type="text/javascript">
             var graph = {{features_by_year_JSON | safe}};
-            Plotly.react('bargraph',graph || {});
+            Plotly.plot('bargraph',graph || {});
           </script>
         </div>
+      </div> -->
+      <div class="col-md-12">
+        <h1 class="display-4 main-title second-block-title">Unique Words</h1>
+        <p class="lead pb-4">Out of the top 100 most used words in successful and unsuccessful songs, 
+          these are the unique ones: the successful words seen here are not in the top 100 most 
+          recurring ones in unsuccessful songs, and vice versa.
+        </p>
+        <p class="lead pb-4">Notice how the general tone of the high-frequency words unique to successful songs
+          is one of more positivity compared to the unsuccessful ones.
+        </p>
+        <p class="lead"><b>Words like 'friend' and 'dance' have
+          a more positive connotation than 'die', 'lie' and 'end', and this appears to contribute to the
+          success of the song.</b>
+        </p>
+        <div id="bubble_freq">
+          <script type="text/javascript">
+            var unique_json = {{unique_JSON | safe}};
+            var traceS = {
+              x: unique_json.top100_s_unique,
+              y: unique_json.s_unique_f,
+              mode: "markers",
+              name: "Successful",
+              marker: {
+                color: "steelblue",
+                size: unique_json.s_size,
+                opacity: 0.7
+              }
+            };
+            var traceU = {
+              x: unique_json.top100_u_unique,
+              y: unique_json.u_unique_f,
+              name: "Unsuccessful",
+              mode: "markers",
+              marker: {
+                color: "indianred",
+                size: unique_json.u_size,
+                opacity: 0.7
+              }
+            };
+            var data = [traceS, traceU];
 
+            var layoutScatter = {
+              plot_bgcolor:"gainsboro",
+              paper_bgcolor:"gainsboro",
+              // title: {
+              //   text: "Unique High-Frequency Words",
+              //   x: 0
+              // },
+              legend: {
+                orientation: "h",
+                x: 0,
+                y: -0.3
+              },
+              xaxis: {
+                showgrid: false,
+                tickangle: -45
+              },
+              yaxis: {
+                showgrid: false,
+                visible: false,
+                range: [-3, 4]
+              }
+            };
+  
+            Plotly.newPlot("bubble_freq", data, layoutScatter);
+          </script>
+        </div>
       </div>
     </div>
 
@@ -283,8 +341,66 @@
 
     <div class="row light-block pl-5 pr-5 pt-5 pb-5">
       <div class="col-md-12">
-        <h1 class="display-4 main-title second-block-title">Other Chart</h1>
-        <p class="lead pb-5">The lyrics of your song will be compared to our dataset of 41k+ songs to determine its likelihood of achieving success.</p>
+        <h1 class="display-4 main-title second-block-title">Word Frequency in Successful Song Lyrics</h1>
+        <p class="lead pb-5">Most of the top words in successful song lyrics are also the most recurring in unsuccessful songs. However, the majority of these words appear more often in successful lyrics in proportion to other words, like 'know' and 'love', for example.</p>
+
+        <!-- <div id="bar">
+          <script type="text/javascript">
+            var data_json_js = {{data_JSON | safe}};
+            console.log(data_json_js.year)
+            var traceBar = [{
+              x: data_json_js.energy,
+              y: data_json_js.year,
+              type: "bar",
+              orientation: "h"
+            }];
+  
+            var layoutBar = {
+              title: "Testing bar chart"
+            };
+  
+            Plotly.newPlot("bar", traceBar, layoutBar);
+          </script>
+        </div> -->
+        <div id="bar_freq">
+          <script type="text/javascript">
+            var freq_json = {{freq_JSON | safe}};
+            var traceS = {
+              x: freq_json.words,
+              y: freq_json.s_freq,
+              name: "Successful",
+              type: "bar",
+              marker: {
+                color: freq_json.colors_s
+              }
+            };
+            var traceU = {
+              x: freq_json.words,
+              y: freq_json.u_freq,
+              name: "Unsuccessful",
+              type: "bar",
+              marker: {
+                color: freq_json.colors_u,
+                opacity: 0.8
+              }
+            };
+            console.log(freq_json.colors_u)
+            var data = [traceS, traceU];
+
+            var layoutBar = {
+              title: "Most Frequent Words in Successful Songs",
+              barmode: "group",
+              xaxis: {
+                tickangle: -45
+              },
+              yaxis: {
+                title: "Frequency (% of total words)"
+              }
+            };
+  
+            Plotly.newPlot("bar_freq", data, layoutBar);
+          </script>
+        </div>
       </div>
     </div>
   </div>

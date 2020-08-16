@@ -2,7 +2,7 @@
 
 ## ETL
 
-### Resources - available in Amazon S3
+### Resources - available on AWS S3 (platinum-rds.cbu3an3ywyth.us-east-2.rds.amazonaws.com)
 - lyrics.csv: 19,045,332 rows - 5 columns (track_id, mxm_id, word, count, is_test)
 
 	https://platinum-lyric-bucket.s3.us-east-2.amazonaws.com/Resources/lyrics.csv
@@ -29,7 +29,9 @@ liveness, loudness, mode, popularity, speechiness, tempo, valence)
 
 	https://platinum-lyric-bucket.s3.us-east-2.amazonaws.com/Resources/data_w_genres.csv
 
-### End Result: 3 final tables
+### End Result
+
+Database stored in AWS-Postgres-RDS (@platinum-rds.cbu3an3ywyth.us-east-2.rds.amazonaws.com/Platinum_Lyrics), and final csv files available on AWS S3 (platinum-rds.cbu3an3ywyth.us-east-2.rds.amazonaws.com)
 
 - platinum_lyrics: track_id, artist_name, song_title, song_year, target_success, target_peak, target_weeks, and word columns
 - platinum_lyrics_features: track_id, artist_name, song_title, song_year, target_success, target_peak, target_weeks, and word columns + feature columns

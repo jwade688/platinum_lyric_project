@@ -98,12 +98,14 @@
       <div class="col-md-12 pb-3" id="enter-lyrics"></div>
       <div class="col-md-12">
         <h2 class="pt-5 pb-2">Enter song lyrics below to find out if it will be a hit or not</h2>
-        <p class="lead">The lyrics of your song will be compared to our dataset of 41k+ songs to determine its likelihood of achieving success.</p>
-        <p class="lead pb-5">Our metric of success was defined as the song having reached <a href="https://www.billboard.com/charts/hot-100" target="_blank">Billboard's top 100 Chart</a> and remained there for at least one week.</p>
+        <p class="lead pb-3">The lyrics of your song will be compared to our dataset of 39k+ songs 
+          to determine its likelihood of achieving success.</p>
+        <p class="lead pb-5">Our metric of success was defined as the song having 
+          reached <a href="https://www.billboard.com/charts/hot-100" target="_blank">Billboard's 
+            top 100 Chart</a> and remained there for at least one week.</p>
       </div>
       
       
-
       <div class="col-md-6">
         <form>
           <div class="form-group">
@@ -141,36 +143,138 @@
         <div class="alert alert-success" id="success-msg" role="alert" style="display: none;">
           <h4 class="alert-heading">This song will be a Hit!</h4>
           <hr>
-          <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
-          <button type="button" class="btn btn-secondary alert-btn">Test another one!</button>
+          <p style="margin-bottom: 0.8rem;">Aww yeah! Congrats! Looks like based on the word selection, count and frequency,
+            your song is likely to be successful and hit the Charts!
+          </p>
+          <p>You likely used a combination of words that are also easily found in other successful songs.
+            Explore the dataset below to find insights on certain words that may contribute even more 
+            to the success of your song.
+          </p>
+          <button type="button" class="btn btn-secondary alert-btn" onclick="clearText()">Test another one!</button>
         </div>
-
+        
         <div class="alert alert-warning" id="not-success-msg" role="alert" style="display: none;">
           <h4 class="alert-heading">This song will not be a Hit...</h4>
           <hr>
-          <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
-          <button type="button" class="btn btn-secondary alert-btn">Test another one!</button>
+          <p style="margin-bottom: 0.8rem;">Oh no! Based on the selection of words and their frequencies in your lyrics, 
+            it looks like this song is not likely to be successful.
+          </p>
+          <p>
+            Explore the dataset below to find insights on certain words that may contribute to the success of your song.
+          </p>
+          <button type="button" class="btn btn-secondary alert-btn" onclick="clearText()">Test another one!</button>
         </div>
 
         <div class="alert alert-secondary" id="neutral-msg" role="alert" style="display: block;">
           <h4 class="alert-heading">Run the model to get your prediction</h4>
           <hr>
-          <p>You successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+          <p style="margin-bottom: 0.5rem;">Paste the lyrics of your song in the text box! Here's what will happen:</p>
+          <p style="margin-bottom: 0.3rem;"><b>1. </b>The lyrics will be broken up into separate words;</p>
+          <p style="margin-bottom: 0.3rem;"><b>2. </b>The less important words ("stop words") will be removed;</p>
+          <p><b>3. </b>The remaining words - the ones that would actually make a differece - will be stemmed. 
+            This means they'll be reduced to a version that would accept different variations. 
+            For example: <em>'amazing'</em>, , <em>'amaze'</em> and <em>'amazed'</em> will all be 
+            considered as <em>'amaz'</em>.</p>
         </div>
+
+        <script type="text/javascript">
+          function clearText() {
+            document.getElementById('lyricsInput').value = '';
+          };
+        </script>
       </div>
     </div>
 
     <div class="row dark-block pl-5 pr-5 pt-5 pb-5">
       <div class="col-md-12">
-        <h1 class="display-4 main-title second-block-title">Explore historical data</h1>
-        <p class="lead">The lyrics of your song will be compared to our dataset of 41k+ songs to determine its likelihood of achieving success.</p>
-        <p class="lead pb-5">Our metric of success was defined as the song having reached <a href="https://www.billboard.com/charts/hot-100" target="_blank">Billboard's top 100 Chart</a> and remained there for at least one week.</p>
-        <div id="bubblechart">
-          <!-- <script type="text/javascript">
-            var graph = {{bubble_chart_JSON | safe}};
-            // Plotly.plot('bubblechart', graph[0].data, graph[0].layout || {});
-            Plotly.plot('bubblechart', graph[0], graph[1] || {});            
-          </script> -->
+        <h1 class="display-4 main-title second-block-title">Explore the dataset</h1>
+        <p class="lead pb-3">Our dataset contains lyrics from over 39k songs with words that have been stemmed, meaning
+          the words that have different variants have been stripped of what sets them apart to be considered as a
+          single word (<em>'times'</em>, <em>'timely'</em>, <em>'timed'</em> -> <em>'time'</em>).
+        </p>
+        <p class="lead pb-5">Additionally, the scope of the project was limited to songs 
+          written in English, so songs in other languages were excluded from the dataset.
+        </p>
+      </div>
+      <div class="col-md-4 pb-5">
+        <div class="alert alert-secondary info-box mr-3 ml-3" role="alert">
+          <h1 class="alert-heading info-box-title">39k</h1>
+          <p>songs</p>
+        </div>
+      </div>
+      <div class="col-md-4 pb-5">
+        <div class="alert alert-secondary info-box mr-3 ml-3" role="alert">
+          <h1 class="alert-heading info-box-title">1,500</h1>
+          <p>words</p>
+        </div>
+      </div>
+      <div class="col-md-4 pb-5">
+        <div class="alert alert-secondary info-box mr-3 ml-3" role="alert">
+          <h2 class="alert-heading"><b>Avg Word Count</b></h2>
+          <hr style="margin-top: 0rem; margin-bottom: 0rem;">
+          <p style="font-size: 1.7rem;">Successful: <b>139</b></p>
+          <p style="font-size: 1.7rem;">Unsuccessful: <b>97</b></p>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <p class="lead">The dataset is complete with features like Acousticness, Instrumentalness, 
+          Tempo, Energy, Loudness, and others. Find beautifully designed charts with insights including 
+          such features and more on the 
+          <a href="https://public.tableau.com/profile/jacob.wade#!/vizhome/platinum_tableau_dashboard/Featurestory?publish=yes" target="_blank" class="tableau-link">Tableau Dashboard</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="row white-block pl-5 pr-5 pb-5">
+      <div class="col-md-12 pt-5">
+        <h1 class="display-4 main-title second-block-title">Word Frequency in Successful Songs</h1>
+        <p class="lead pb-3">Most of the top words in successful song lyrics are also the most recurring in unsuccessful songs. 
+          However, the majority of these words appear more often in successful lyrics in proportion to other words. 
+        </p>
+        <p class="lead">The word <b><em>'love'</em></b>, for example, <b>appears twice as frequently in successful songs 
+          compared to unsuccessful ones</b>.
+        </p>
+        <div id="bar_freq">
+          <script type="text/javascript">
+            var freq_json = {{freq_JSON | safe}};
+            var traceS = {
+              x: freq_json.words,
+              y: freq_json.s_freq,
+              name: "Successful",
+              type: "bar",
+              marker: {
+                color: freq_json.colors_s
+              }
+            };
+            var traceU = {
+              x: freq_json.words,
+              y: freq_json.u_freq,
+              name: "Unsuccessful",
+              type: "bar",
+              marker: {
+                color: freq_json.colors_u,
+                opacity: 0.8
+              }
+            };
+            var data = [traceS, traceU];
+
+            var layoutBar = {
+              barmode: "group",
+              xaxis: {
+                tickangle: -45
+              },
+              yaxis: {
+                title: "Frequency (% of total words)"
+              },
+              legend: {
+                orientation: "h",
+                x: 0,
+                y: -0.3
+              }
+            };
+  
+            Plotly.newPlot("bar_freq", data, layoutBar);
+          </script>
         </div>
       </div>
     </div>
@@ -216,16 +320,17 @@
       </div> -->
       <div class="col-md-12">
         <h1 class="display-4 main-title second-block-title">Unique Words</h1>
-        <p class="lead pb-4">Out of the top 100 most used words in successful and unsuccessful songs, 
-          these are the unique ones: the successful words seen here are not in the top 100 most 
-          recurring ones in unsuccessful songs, and vice versa.
+        <p class="lead pb-3">Out of the top 100 most used words, these are the unique ones: the successful 
+          words seen here are unique to the top 100 words in successful songs and do not appear among the top 
+          100 unsuccessful ones, and vice versa.
         </p>
-        <p class="lead pb-4">Notice how the general tone of the high-frequency words unique to successful songs
+        <p class="lead pb-3">Notice how the general tone of the high-frequency words unique to successful songs
           is one of more positivity compared to the unsuccessful ones.
         </p>
-        <p class="lead"><b>Words like 'friend' and 'dance' have
-          a more positive connotation than 'die', 'lie' and 'end', and this appears to contribute to the
-          success of the song.</b>
+        <p class="lead"><b>Words like <em style="background-color: white;">'friend'</em> 
+          and <em style="background-color: white;">'dance'</em> have a more positive connotation 
+          than <em style="background-color: white;">'die'</em> and <em style="background-color: white;">'lie'</em>, 
+          and this appears to contribute to the success of the song.</b>
         </p>
         <div id="bubble_freq">
           <script type="text/javascript">
@@ -273,7 +378,7 @@
               yaxis: {
                 showgrid: false,
                 visible: false,
-                range: [-3, 4]
+                range: [-3, 3]
               }
             };
   
@@ -286,123 +391,63 @@
     <div class="row dark-block pl-5 pr-5 pt-5 pb-5">
       <div class="col-md-12">
         <h1 class="display-4 main-title second-block-title">Word Cloud Comparison</h1>
-        <p class="lead pb-5">Use the dropdown to select music genres for a side by side comparison of the most common words.</p>
-      </div>
-      <div class="col-md-6">
+        <p class="lead pb-5">Use the dropdown to select music genres for a side by side comparison of the 
+          most common words in successful and unsuccessful songs.</p>
         <div class="form-group">
-          <select class="form-control" id="first-genre-select" name="first-genre" placeholder="Select Genre">
-            <option selected>Rock</option>
-            <option>Rap</option>
-            <option>Jazz</option>
+          <select class="form-control genre-dropdown" id="genre-select" name="first-genre">
+            <option value="" disabled selected hidden>Choose a music genre</option>
+            <option value="blues" selected>Blues</option>
+            <option value="country">Country</option>
+            <option value="edm">EDM</option>
+            <option value="electronic">Electronic</option>
+            <option value="folk">Folk</option>
+            <option value="hip_hop">Hip Hop</option>
+            <option value="jam">Jam</option>
+            <option value="jazz">Jazz</option>
+            <option value="latin">Latin</option>
+            <option value="metal">Metal</option>
+            <option value="pop">Pop</option>
+            <option value="punk">Punk</option>
+            <option value="rap">Rap</option>
+            <option value="reggae">Reggae</option>
+            <option value="rnb">Rhythm and Blues</option>
+            <option value="rock">Rock</option>
           </select>
           <script type="text/javascript">
             $(function() {
-              $("#first-genre-select").change(function() {
+              $("#genre-select").change(function() {
                 var selectedGenre = $(this).val();
+                console.log(selectedGenre);
                 var imgPartialPath = "../static/images/wordcloud_"
+                var successfulExtension = "_s"
+                var unsuccessfulExtension = "_u"
                 var imgExtension = ".png"
-                var imgPath = imgPartialPath.concat(selectedGenre).concat(imgExtension)
-                console.log(imgPath);
-                $('#first-word-cloud-img').attr("src", imgPath).attr("alt", selectedGenre)
+                var imgPathSuccessful = imgPartialPath.concat(selectedGenre).concat(successfulExtension).concat(imgExtension)
+                var imgPathUnsuccessful = imgPartialPath.concat(selectedGenre).concat(unsuccessfulExtension).concat(imgExtension)
+                $('#successful-word-cloud-img').attr("src", imgPathSuccessful).attr("alt", selectedGenre);
+                $('#unsuccessful-word-cloud-img').attr("src", imgPathUnsuccessful).attr("alt", selectedGenre);
               })
             })
           </script>
         </div>
-        <div id="first-word-cloud">
-          <img id="first-word-cloud-img" src="../static/images/wordcloud_Rock.png" alt="Rock">
-        </div>
       </div>
-
       <div class="col-md-6">
-        <div class="form-group">
-          <select class="form-control" id="second-genre-select" name="second-genre" placeholder="Select Genre">
-            <option selected>Rap</option>
-            <option>Rock</option>
-            <option>Jazz</option>
-          </select>
-          <script type="text/javascript">
-            $(function() {
-              $("#second-genre-select").change(function() {
-                var selectedGenre = $(this).val();
-                var imgPartialPath = "../static/images/wordcloud_"
-                var imgExtension = ".png"
-                var imgPath = imgPartialPath.concat(selectedGenre).concat(imgExtension)
-                console.log(imgPath);
-                $('#second-word-cloud-img').attr("src", imgPath).attr("alt", selectedGenre)
-              })
-            })
-          </script>
+        <div>
+          <p class="lead">Successful</p>
+          <hr class="hr-dark-bg" style="margin-right: 1rem;">
+          <img id="successful-word-cloud-img" src="../static/images/wordcloud_blues_s.png" alt="Blues">
         </div>
-        <div id="second-word-cloud">
-          <img id="second-word-cloud-img" src="../static/images/wordcloud_Rap.png" alt="Rap">
+      </div>
+      <div class="col-md-6">
+        <div>
+          <p class="lead">Unsuccessful</p>
+          <hr class="hr-dark-bg" style="margin-right: 1rem;">
+          <img id="unsuccessful-word-cloud-img" src="../static/images/wordcloud_blues_u.png" alt="Blues">
         </div>
       </div>
     </div>
 
-    <div class="row light-block pl-5 pr-5 pt-5 pb-5">
-      <div class="col-md-12">
-        <h1 class="display-4 main-title second-block-title">Word Frequency in Successful Song Lyrics</h1>
-        <p class="lead pb-5">Most of the top words in successful song lyrics are also the most recurring in unsuccessful songs. However, the majority of these words appear more often in successful lyrics in proportion to other words, like 'know' and 'love', for example.</p>
-
-        <!-- <div id="bar">
-          <script type="text/javascript">
-            var data_json_js = {{data_JSON | safe}};
-            console.log(data_json_js.year)
-            var traceBar = [{
-              x: data_json_js.energy,
-              y: data_json_js.year,
-              type: "bar",
-              orientation: "h"
-            }];
-  
-            var layoutBar = {
-              title: "Testing bar chart"
-            };
-  
-            Plotly.newPlot("bar", traceBar, layoutBar);
-          </script>
-        </div> -->
-        <div id="bar_freq">
-          <script type="text/javascript">
-            var freq_json = {{freq_JSON | safe}};
-            var traceS = {
-              x: freq_json.words,
-              y: freq_json.s_freq,
-              name: "Successful",
-              type: "bar",
-              marker: {
-                color: freq_json.colors_s
-              }
-            };
-            var traceU = {
-              x: freq_json.words,
-              y: freq_json.u_freq,
-              name: "Unsuccessful",
-              type: "bar",
-              marker: {
-                color: freq_json.colors_u,
-                opacity: 0.8
-              }
-            };
-            console.log(freq_json.colors_u)
-            var data = [traceS, traceU];
-
-            var layoutBar = {
-              title: "Most Frequent Words in Successful Songs",
-              barmode: "group",
-              xaxis: {
-                tickangle: -45
-              },
-              yaxis: {
-                title: "Frequency (% of total words)"
-              }
-            };
-  
-            Plotly.newPlot("bar_freq", data, layoutBar);
-          </script>
-        </div>
-      </div>
-    </div>
+    
   </div>
 
 </body>

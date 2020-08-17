@@ -29,7 +29,7 @@ features_by_year_results = []
 # Set selected_feature so that features_by_year chart has an initial plot to show:
 selected_feature = "mode"
 # Read csv of word frequencies for successful and unsuccessful song lyrics
-top_wordfreq_df = pd.read_csv('word_freq_df.csv')
+word_freq_df = pd.read_csv("https://platinum-lyric-bucket.s3.us-east-2.amazonaws.com/word_freq.csv")
 
 def lyrics_BoW(lyrics):
     # Creating dictionary to match trained ML model, with words as keys and filled with zeros
@@ -154,22 +154,21 @@ def plot_bubble_chart():
     return data_JSON
 
 def plot_unique_words_bubble():
-    global top_wordfreq_df
+    global word_freq_df
     # Get word frequencies of top 100 successful and unsuccessful songs
-    top100_s = top_wordfreq_df.sort_values('freq in successful', ascending=False).iloc[:100]['words'].to_list()
-    top100_u = top_wordfreq_df.sort_values('freq in unsuccessful', ascending=False).iloc[:101]['words'].to_list()
-    top100_u.remove("que")
-    # top100_u.remove("nigga")
+    top100_s = word_freq_df.sort_values('freq_successful', ascending=False).iloc[:100]['words'].to_list()
+    top100_u = word_freq_df.sort_values('freq_unsuccessful', ascending=False).iloc[:100]['words'].to_list()
+
     # Get unique words in successful and unsuccessful songs
     top100_s_unique = [word for word in top100_s if word not in top100_u]
     top100_u_unique = [word for word in top100_u if word not in top100_s]
     # Get frequencies of unique words
     s_unique_f = []
     for word in top100_s_unique:
-        s_unique_f.append(top_wordfreq_df['freq in successful'][top_wordfreq_df['words']==word].values[0])
+        s_unique_f.append(word_freq_df['freq_successful'][word_freq_df['words']==word].values[0])
     u_unique_f = []
     for word in top100_u_unique:
-        u_unique_f.append(top_wordfreq_df['freq in unsuccessful'][top_wordfreq_df['words']==word].values[0])
+        u_unique_f.append(word_freq_df['freq_unsuccessful'][word_freq_df['words']==word].values[0])
     # Get size list
     s_size = [f*300 for f in s_unique_f]
     u_size = [f*300 for f in u_unique_f]
@@ -183,11 +182,13 @@ def plot_unique_words_bubble():
     return unique_JSON
 
 def plot_freq_words_bar():
-    global top_wordfreq_df
+    global word_freq_df
+    # Sort df by successful word frequencies
+    s_word_freq_df = word_freq_df.sort_values('freq_successful', ascending=False)
     # Get word frequencies of successful and unsuccessful songs
-    s_freq = top_wordfreq_df.iloc[1:21]['freq in successful'].to_list()
-    u_freq = top_wordfreq_df.iloc[1:21]['freq in unsuccessful'].to_list()
-    words = top_wordfreq_df.iloc[1:21]['words'].to_list()
+    s_freq = s_word_freq_df.iloc[0:20]['freq_successful'].to_list()
+    u_freq = s_word_freq_df.iloc[0:20]['freq_unsuccessful'].to_list()
+    words = s_word_freq_df.iloc[0:20]['words'].to_list()
     # Define colors for chart
     colors_s = ['lightsteelblue',] * 20
     colors_s[0] = 'steelblue'
@@ -197,6 +198,7 @@ def plot_freq_words_bar():
     freq = {'words': words,'s_freq': s_freq, 'u_freq': u_freq, 'colors_s': colors_s, 'colors_u': colors_u}
     freq_JSON = json.dumps(freq)
     return freq_JSON
+
 
 
 

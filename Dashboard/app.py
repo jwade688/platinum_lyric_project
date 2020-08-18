@@ -17,6 +17,7 @@ from tensorflow import keras
 app = Flask(__name__)
 
 # Set up postgres connection
+# app.config["SQLALCHEMY_DATABASE_URI"] = f"postgres://postgres:{password}@platinum-rds.cbu3an3ywyth.us-east-2.rds.amazonaws.com/Platinum_Lyrics"
 app.config["SQLALCHEMY_DATABASE_URI"] = f"postgres://postgres:{password}@platinum-rds.cbu3an3ywyth.us-east-2.rds.amazonaws.com/Platinum_Lyrics"
 
 # Create a Flask-SQLAlchemy instance
@@ -29,7 +30,7 @@ features_by_year_results = []
 # Set selected_feature so that features_by_year chart has an initial plot to show:
 selected_feature = "mode"
 # Read csv of word frequencies for successful and unsuccessful song lyrics
-word_freq_df = pd.read_csv("https://platinum-lyric-bucket.s3.us-east-2.amazonaws.com/word_freq.csv")
+# word_freq_df = pd.read_csv("https://platinum-lyric-bucket.s3.us-east-2.amazonaws.com/word_freq.csv")
 
 def lyrics_BoW(lyrics):
     # Creating dictionary to match trained ML model, with words as keys and filled with zeros
@@ -49,15 +50,16 @@ def lyrics_BoW(lyrics):
     for word in filtered_lyrics:
         if word in model_dict.keys():
             model_dict[word] += 1
-    print(model_dict)
     
+    # Creating numpy array from dictionary
+    # model_array = np.array([list(model_dict.values())])
+
     # Creating final DataFrame
     lyrics_df = pd.DataFrame(data=model_dict, index=[0])
 
-    # Creating numpy array from dictionary
+    # Creating numpy array from DataFrame
     model_array = lyrics_df.to_numpy()
-    # model_array = np.array([list(model_dict.values())])
-    
+
     # Load the ML model from the file 
     # cnb_model = joblib.load("NB_model_v1.1.pkl")
     # model = pickle.load(open('NB_model_v1.1.pkl','rb'))
@@ -154,7 +156,11 @@ def plot_bubble_chart():
     return data_JSON
 
 def plot_unique_words_bubble():
-    global word_freq_df
+    features_by_year_results = by_year()
+
+    word_freq_df = pd.DataFrame(features_by_year_results)
+    
+    # global word_freq_df
     # Get word frequencies of top 100 successful and unsuccessful songs
     top100_s = word_freq_df.sort_values('freq_successful', ascending=False).iloc[:100]['words'].to_list()
     top100_u = word_freq_df.sort_values('freq_unsuccessful', ascending=False).iloc[:100]['words'].to_list()
@@ -182,7 +188,20 @@ def plot_unique_words_bubble():
     return unique_JSON
 
 def plot_freq_words_bar():
-    global word_freq_df
+    # global features_by_year_results
+    features_by_year_results = by_year()
+    print("Returning to plot_freq_words_bar() function")
+    # words = [element["words"] for element in features_by_year_results]
+    # freq_unsuccessful = [element["freq_unsuccessful"] for element in features_by_year_results]
+    # freq_successful = [element["freq_successful"] for element in features_by_year_results]
+    # count_unsuccessful = [element["count_unsuccessful"] for element in features_by_year_results]s
+    # count_successful = [element["count_successful"] for element in features_by_year_results]
+
+    word_freq_df = pd.DataFrame(features_by_year_results)
+
+
+    # global word_freq_df
+
     # Sort df by successful word frequencies
     s_word_freq_df = word_freq_df.sort_values('freq_successful', ascending=False)
     # Get word frequencies of successful and unsuccessful songs
@@ -199,42 +218,50 @@ def plot_freq_words_bar():
     freq_JSON = json.dumps(freq)
     return freq_JSON
 
+# class PlatinumFeatures(db.Model):
+#     __tablename__ = 'platinum_features'
 
+#     song_year = db.Column(db.BigInteger(), primary_key=True)
+#     feature_popularity = db.Column(db.Float())
+#     target_success = db.Column(db.Float())
+#     feature_duration = db.Column(db.Float())
+#     feature_tempo = db.Column(db.Float())
+#     feature_key = db.Column(db.Float())
+#     feature_mode = db.Column(db.Float())
+#     feature_acousticness = db.Column(db.Float())
+#     feature_instrumentalness = db.Column(db.Float())
+#     feature_danceability = db.Column(db.Float())
+#     feature_energy = db.Column(db.Float())
+#     feature_liveness = db.Column(db.Float())
+#     feature_loudness = db.Column(db.Float())
+#     feature_speechiness = db.Column(db.Float())
+#     feature_valence = db.Column(db.Float())
+#     feature_explicit = db.Column(db.Float())
+#     target_peak = db.Column(db.Float())
+#     target_weeks = db.Column(db.Float())
 
+#     def __init__(self, song_year):
+#             self.song_year = song_year
 
-class PlatinumFeatures(db.Model):
-    __tablename__ = 'platinum_features'
+class WordFreq(db.Model):
+    __tablename__ = 'word_freq'
 
-    song_year = db.Column(db.BigInteger(), primary_key=True)
-    feature_popularity = db.Column(db.Float())
-    target_success = db.Column(db.Float())
-    feature_duration = db.Column(db.Float())
-    feature_tempo = db.Column(db.Float())
-    feature_key = db.Column(db.Float())
-    feature_mode = db.Column(db.Float())
-    feature_acousticness = db.Column(db.Float())
-    feature_instrumentalness = db.Column(db.Float())
-    feature_danceability = db.Column(db.Float())
-    feature_energy = db.Column(db.Float())
-    feature_liveness = db.Column(db.Float())
-    feature_loudness = db.Column(db.Float())
-    feature_speechiness = db.Column(db.Float())
-    feature_valence = db.Column(db.Float())
-    feature_explicit = db.Column(db.Float())
-    target_peak = db.Column(db.Float())
-    target_weeks = db.Column(db.Float())
+    words = db.Column(db.String, primary_key=True)
+    freq_unsuccessful = db.Column(db.Float())
+    freq_successful = db.Column(db.Float())
+    count_unsuccessful = db.Column(db.Float())
+    count_successful = db.Column(db.Float())
 
-    def __init__(self, song_year):
-            self.song_year = song_year
-
+    def __init__(self, words):
+            self.words = words
 
 @app.route("/")
 def index():
-    global selected_feature
-    print(f"Selected feature: {selected_feature}")
-    features_by_year_JSON = plot_features_by_year(selected_feature)
+    # global selected_feature
+    # print(f"Selected feature: {selected_feature}")
+    # features_by_year_JSON = plot_features_by_year(selected_feature)
     # bubble_chart_JSON = plot_bubble_chart()
-    data_JSON = plot_bubble_chart()
+    # data_JSON = plot_bubble_chart()
     freq_JSON = plot_freq_words_bar()
     unique_JSON = plot_unique_words_bubble()
     print("Back to route /")
@@ -244,8 +271,6 @@ def index():
     # return render_template("index.html", features_by_year_JSON=features_by_year_JSON, data_JSON=data_JSON, freq_JSON=freq_JSON, unique_JSON=unique_JSON)
     return render_template(
         "index.html",
-        features_by_year_JSON=features_by_year_JSON,
-        data_JSON=data_JSON,
         freq_JSON=freq_JSON,
         unique_JSON=unique_JSON
     )
@@ -315,10 +340,12 @@ def input_feature(userInput=None):
 
 @app.route("/features_by_year")
 def by_year():
-    global features_by_year_results
     # Query database for all values from features_by_year table (defined in Byyear Class)
     # features_by_year = Byyear.query.all()
-    features_test = PlatinumFeatures.query.all()
+    # features_test = PlatinumFeatures.query.all()
+    print("Entering by_year() function.")
+    word_freq = WordFreq.query.all()
+
 
     # features_by_year_results = [
     #     {
@@ -335,23 +362,35 @@ def by_year():
     #     } for year in features_by_year
     # ]
 
-    features_testing = [
+    # features_testing = [
+    #     {
+    #         "year": year.song_year,
+    #         "mode": year.feature_mode,
+    #         "acoustiness": year.feature_acousticness,
+    #         "instrumentalness": year.feature_instrumentalness,
+    #         "danceability": year.feature_danceability,
+    #         "energy": year.feature_energy,
+    #         "liveness": year.feature_liveness,
+    #         "loudness": year.feature_loudness,
+    #         "speechiness": year.feature_speechiness
+
+    #     } for year in features_test
+    # ]
+
+    word_dict = [
         {
-            "year": year.song_year,
-            "mode": year.feature_mode,
-            "acoustiness": year.feature_acousticness,
-            "instrumentalness": year.feature_instrumentalness,
-            "danceability": year.feature_danceability,
-            "energy": year.feature_energy,
-            "liveness": year.feature_liveness,
-            "loudness": year.feature_loudness,
-            "speechiness": year.feature_speechiness
+            "words": word.words,
+            "freq_unsuccessful": word.freq_unsuccessful,
+            "freq_successful": word.freq_successful,
+            "count_unsuccessful": word.count_unsuccessful,
+            "count_successful": word.count_successful
 
-        } for year in features_test
+        } for word in word_freq
     ]
-
+    print(f"Returning word_dict: {word_dict}")
     # return features_by_year_results
-    return features_testing
+    # return features_testing
+    return word_dict
 
 
 

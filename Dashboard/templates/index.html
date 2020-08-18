@@ -55,32 +55,6 @@
   <script type=text/javascript>
     $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
   </script>
- 
-  <!-- <script type="text/javascript">
-    $(function() {
-      $('a#run-btn').bind('click', function() {
-        $.getJSON($SCRIPT_ROOT + '/get_lyrics', {
-          testing: $(input[name='testing']).val()
-        }, function(data) {
-          $('#receive-pred').text(data.result);
-        });
-        return false;
-      });
-    });
-  </script>
- -->
-
-
-
-
-  <!-- <script type="text/javascript">
-  function getPrediction() {
-    $.getJSON("/model_predict", function(data) {
-      $('receive-pred').text(data.value)
-    });
-  };
-  </script> -->
-
 
 </head>
 
@@ -280,44 +254,7 @@
     </div>
 
     <div class="row light-block pl-5 pr-5 pt-5 pb-5">
-      <!-- <div class="col-md-12">
-        <h1 class="display-4 main-title second-block-title">Features by Year</h1>
-        <p class="lead pb-5">The lyrics of your song will be compared to our dataset of 41k+ songs to determine its likelihood of achieving success.</p>
-      </div> -->
-      <!-- <div class="col-md-6">
-        <div class="form-group">
-            <select class="form-control dropdown" id="feature-select" name="feature-dropdown" placeholder="Select Feature">
-              <option selected>Select feature</option>
-              <option>mode</option>
-              <option>acoustiness</option>
-              <option>instrumentalness</option>
-              <option>danceability</option>
-              <option>energy</option>
-              <option>liveness</option>
-              <option>speechiness</option>
-            </select>
-
-          <script type="text/javascript">
-            $(function() {
-              $("#feature-select").change(function() {
-                var userFeatureSelection = $("select[name='feature-dropdown']").val();
-                var routeFeature = $SCRIPT_ROOT + "/chart_feature_select";
-                $.get( routeFeature, { userFeatureSelect: userFeatureSelection }, function(data) {
-                  console.log(data)
-                  Plotly.plot('bargraph',data.result || {});
-                });
-              });
-            });
-          </script>
-        </div>
-
-        <div id="bargraph">
-          <script type="text/javascript">
-            var graph = {{features_by_year_JSON | safe}};
-            Plotly.plot('bargraph',graph || {});
-          </script>
-        </div>
-      </div> -->
+ 
       <div class="col-md-12">
         <h1 class="display-4 main-title second-block-title">Unique Words</h1>
         <p class="lead pb-3">Out of the top 100 most used words, these are the unique ones: the successful 

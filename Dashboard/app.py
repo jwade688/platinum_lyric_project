@@ -14,6 +14,7 @@ from nltk.stem import PorterStemmer
 from word_columns import word_columns
 # from tensorflow import keras
 import pickle
+# import joblib
 
 app = Flask(__name__)
 
@@ -49,16 +50,11 @@ def lyrics_BoW(lyrics):
     # Creating numpy array from dictionary
     model_array = np.array([list(model_dict.values())])
 
-    # Creating final DataFrame
-    # lyrics_df = pd.DataFrame(data=model_dict, index=[0])
-
-    # Creating numpy array from DataFrame
-    # model_array = lyrics_df.to_numpy()
-
     # Load the ML model from the file 
     # cnb_model = joblib.load("NB_model_v1.1.pkl")
     model = pickle.load(open('rf_model_pickle_v2.pkl','rb'))
-    # model = keras.models.load_model("nn_model_v1.1.h5")
+    # model = joblib.load("NB_model_v3.pkl")
+    # model = keras.models.load_model("nn_model_v3.h5")
 
     # Feed model_array into ML Model, returning prediction
     # prediction = cnb_model.predict(model_dict)
@@ -77,9 +73,9 @@ def lyrics_BoW(lyrics):
     return prediction
 
 def plot_unique_words_bubble():
-    features_by_year_results = word_frequency()
+    word_freq_data = word_frequency()
 
-    word_freq_df = pd.DataFrame(features_by_year_results)
+    word_freq_df = pd.DataFrame(word_freq_data)
     
     # global word_freq_df
     # Get word frequencies of top 100 successful and unsuccessful songs
@@ -109,11 +105,10 @@ def plot_unique_words_bubble():
     return unique_JSON
 
 def plot_freq_words_bar():
-    # global features_by_year_results
-    features_by_year_results = word_frequency()
+    word_freq_data = word_frequency()
     print("Returning to plot_freq_words_bar() function")
 
-    word_freq_df = pd.DataFrame(features_by_year_results)
+    word_freq_df = pd.DataFrame(word_freq_data)
 
     # Sort df by successful word frequencies
     s_word_freq_df = word_freq_df.sort_values('freq_successful', ascending=False)
@@ -160,6 +155,7 @@ def get_lyrics():
     print("Entering /get_lyrics route")
     # Retrieve user input containing lyrics
     lyrics_input = request.args.get('userLyrics', 0, type=str)
+    print(f"lyrics_input: {lyrics_input}")
     # Call lyrics_BoW function to process lyrics and run ML model, returning prediction
     prediction = lyrics_BoW(lyrics_input)
     print(f"Prediction from /get_lyrics route: {prediction}")

@@ -18,7 +18,7 @@
 
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://d3js.org/d3.v5.min.js"></script>
-  <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
+  <!-- <script src="https://d3js.org/d3-fetch.v1.min.js"></script> -->
   <!-- <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script> -->
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -191,9 +191,10 @@
         </div>
       </div>
       <div class="col-md-12">
-        <p class="lead">The dataset is complete with features like Acousticness, Instrumentalness, 
-          Tempo, Energy, Loudness, and others. Find beautifully designed charts with insights including 
-          such features and more on the 
+        <p class="lead">Of course the lyrics are not the only thing that can make a song successful, 
+          many other factors can collectively lead to it. Find beautifully designed charts with 
+          insights including features like Acousticness, Instrumentalness, Tempo, Energy, Loudness, 
+          and others on the 
           <a href="https://public.tableau.com/profile/jacob.wade#!/vizhome/platinum_tableau_dashboard/Featurestory?publish=yes" target="_blank" class="tableau-link">Tableau Dashboard</a>.
         </p>
       </div>
@@ -299,10 +300,6 @@
             var layoutScatter = {
               plot_bgcolor:"gainsboro",
               paper_bgcolor:"gainsboro",
-              // title: {
-              //   text: "Unique High-Frequency Words",
-              //   x: 0
-              // },
               legend: {
                 orientation: "h",
                 x: 0,
@@ -332,8 +329,7 @@
           most common words in successful and unsuccessful songs.</p>
         <div class="form-group">
           <select class="form-control genre-dropdown" id="genre-select" name="first-genre">
-          <!-- <select class="form-control" id="genre-select" name="first-genre"> -->
-            <option value="">Choose a music genre</option>
+            <option value="blues">Choose a music genre</option>
             <option value="blues">Blues</option>
             <option value="country">Country</option>
             <option value="edm">EDM</option>

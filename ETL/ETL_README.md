@@ -107,7 +107,7 @@ Database stored in AWS-Postgres-RDS (@platinum-rds.cbu3an3ywyth.us-east-2.rds.am
 
 6-Postgres - postgres_create_final_tables.sql
 
-<img src="ERD1.png" width="700">
+<img src="ERD1.png" width="500">
 
 	- from pivot and million_songs we can create the table pivot_songs containing track_id, artist_name, song_title (we don't add the word columns yet for easier processing)
 	- pivot_songs and bb_id / bb_no_id:
@@ -119,6 +119,8 @@ Database stored in AWS-Postgres-RDS (@platinum-rds.cbu3an3ywyth.us-east-2.rds.am
 		- platinum_lyrics has already all the common songs (with words) and the target columns. So to add the Spotify features, we can join the 2 tables. 
 		- for easy processing, we'll join pivot_songs_bb and spotify. As we only join on artist_name and song_title, we create several duplicates, so we delete all the ones with the same track_id.
 		- this creates platinum_features, and after adding the word columns (from pivot table) we get platinum_lyrics_features
+		
+<img src="ERD2.png" width="500">		
 
 7- Postgres_to_csv.ipynb
 
@@ -130,5 +132,6 @@ Database stored in AWS-Postgres-RDS (@platinum-rds.cbu3an3ywyth.us-east-2.rds.am
 	- https://platinum-lyric-bucket.s3.us-east-2.amazonaws.com/platinum_lyrics.csv
 	- https://platinum-lyric-bucket.s3.us-east-2.amazonaws.com/platinum_lyrics_features.csv
 	- https://platinum-lyric-bucket.s3.us-east-2.amazonaws.com/platinum_features.csv
+	- https://platinum-lyric-bucket.s3.us-east-2.amazonaws.com/platinum_spotify.csv
 
 

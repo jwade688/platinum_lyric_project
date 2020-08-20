@@ -6,21 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>The Platinum Lyric Project</title>
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
   <link
   rel="stylesheet"
   href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
   integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
   crossorigin="anonymous"
   />
-  <!-- <link rel="stylesheet" type="text/css" href="../static/css/style.css"> -->
   <link rel="stylesheet" type="text/css" href="../static/css/style.css">
 
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="https://d3js.org/d3.v5.min.js"></script>
-  <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
-  <!-- <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script> -->
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
   <!-- https://www.w3schools.com/howto/howto_css_smooth_scroll.asp#section2 -->
@@ -55,32 +49,6 @@
   <script type=text/javascript>
     $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
   </script>
- 
-  <!-- <script type="text/javascript">
-    $(function() {
-      $('a#run-btn').bind('click', function() {
-        $.getJSON($SCRIPT_ROOT + '/get_lyrics', {
-          testing: $(input[name='testing']).val()
-        }, function(data) {
-          $('#receive-pred').text(data.result);
-        });
-        return false;
-      });
-    });
-  </script>
- -->
-
-
-
-
-  <!-- <script type="text/javascript">
-  function getPrediction() {
-    $.getJSON("/model_predict", function(data) {
-      $('receive-pred').text(data.value)
-    });
-  };
-  </script> -->
-
 
 </head>
 
@@ -217,9 +185,10 @@
         </div>
       </div>
       <div class="col-md-12">
-        <p class="lead">The dataset is complete with features like Acousticness, Instrumentalness, 
-          Tempo, Energy, Loudness, and others. Find beautifully designed charts with insights including 
-          such features and more on the 
+        <p class="lead">We know that lyrics alone are not likely to make or break a song, 
+          many other factors can collectively lead to its success (or failure!). Find beautifully designed charts with 
+          insights including factors like Acousticness, Instrumentalness, Tempo, Energy, Loudness, 
+          and others through the years and for different music genres on the 
           <a href="https://public.tableau.com/profile/jacob.wade#!/vizhome/platinum_tableau_dashboard/Featurestory?publish=yes" target="_blank" class="tableau-link">Tableau Dashboard</a>.
         </p>
       </div>
@@ -280,44 +249,7 @@
     </div>
 
     <div class="row light-block pl-5 pr-5 pt-5 pb-5">
-      <!-- <div class="col-md-12">
-        <h1 class="display-4 main-title second-block-title">Features by Year</h1>
-        <p class="lead pb-5">The lyrics of your song will be compared to our dataset of 41k+ songs to determine its likelihood of achieving success.</p>
-      </div> -->
-      <!-- <div class="col-md-6">
-        <div class="form-group">
-            <select class="form-control dropdown" id="feature-select" name="feature-dropdown" placeholder="Select Feature">
-              <option selected>Select feature</option>
-              <option>mode</option>
-              <option>acoustiness</option>
-              <option>instrumentalness</option>
-              <option>danceability</option>
-              <option>energy</option>
-              <option>liveness</option>
-              <option>speechiness</option>
-            </select>
-
-          <script type="text/javascript">
-            $(function() {
-              $("#feature-select").change(function() {
-                var userFeatureSelection = $("select[name='feature-dropdown']").val();
-                var routeFeature = $SCRIPT_ROOT + "/chart_feature_select";
-                $.get( routeFeature, { userFeatureSelect: userFeatureSelection }, function(data) {
-                  console.log(data)
-                  Plotly.plot('bargraph',data.result || {});
-                });
-              });
-            });
-          </script>
-        </div>
-
-        <div id="bargraph">
-          <script type="text/javascript">
-            var graph = {{features_by_year_JSON | safe}};
-            Plotly.plot('bargraph',graph || {});
-          </script>
-        </div>
-      </div> -->
+ 
       <div class="col-md-12">
         <h1 class="display-4 main-title second-block-title">Unique Words</h1>
         <p class="lead pb-3">Out of the top 100 most used words, these are the unique ones: the successful 
@@ -362,10 +294,6 @@
             var layoutScatter = {
               plot_bgcolor:"gainsboro",
               paper_bgcolor:"gainsboro",
-              // title: {
-              //   text: "Unique High-Frequency Words",
-              //   x: 0
-              // },
               legend: {
                 orientation: "h",
                 x: 0,
@@ -395,8 +323,8 @@
           most common words in successful and unsuccessful songs.</p>
         <div class="form-group">
           <select class="form-control genre-dropdown" id="genre-select" name="first-genre">
-            <option value="" disabled selected hidden>Choose a music genre</option>
-            <option value="blues" selected>Blues</option>
+            <option value="blues">Choose a music genre</option>
+            <option value="blues">Blues</option>
             <option value="country">Country</option>
             <option value="edm">EDM</option>
             <option value="electronic">Electronic</option>
@@ -447,11 +375,23 @@
       </div>
     </div>
 
+    <div class="row black-block pl-5 pr-5 pt-5 pb-5">
+      <div class="col-md-12">
+        <h1 class="display-4 main-title second-block-title">Thanks for stopping by!</h1>
+        <p class="lead pb-5">Please enjoy this loop of some of the most common words used in 
+          songs through the years. And don't forget to check out the Tableau Dashboard for more.
+        </p>
+        <div class="video">
+          <video width="400" controls autoplay>
+            <source src="../static/images/word_cloud_decade_small_loop.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </div>
     
   </div>
 
 </body>
-
-
 
 </html>

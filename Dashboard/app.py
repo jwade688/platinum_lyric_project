@@ -12,14 +12,11 @@ from nltk import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from word_columns import word_columns
-# from tensorflow import keras
-import pickle
-# import joblib
+import joblib
 
 app = Flask(__name__)
 
 # Set up postgres connection
-# app.config["SQLALCHEMY_DATABASE_URI"] = f"postgres://postgres:{password}@platinum-rds.cbu3an3ywyth.us-east-2.rds.amazonaws.com/Platinum_Lyrics"
 app.config["SQLALCHEMY_DATABASE_URI"] = f"postgres://postgres:{password}@platinum-rds.cbu3an3ywyth.us-east-2.rds.amazonaws.com/Platinum_Lyrics"
 
 # Create a Flask-SQLAlchemy instance
@@ -31,10 +28,10 @@ db = SQLAlchemy(app)
 def lyrics_BoW(lyrics):
     # Creating dictionary to match trained ML model, with words as keys and filled with zeros
     model_dict = dict.fromkeys(word_columns, 0)
-    print("Entering lyrics_BoW function.")
-    # Tokenizing
+    
+    # Tokenizing user input
     words = nltk.word_tokenize(lyrics)
-    print(f"words from lyrics_BoW: {words}")
+
     # Create an object of class PorterStemmer; set stopwords from NLTK as variable
     porter = PorterStemmer()
     stop_words = stopwords.words('english')
@@ -42,25 +39,20 @@ def lyrics_BoW(lyrics):
     # Removing stopwords and stemming the remaining ones
     filtered_lyrics = [porter.stem(w) for w in words if not w in stop_words]
     print(f"filtered_lyics from lyrics_BoW: {filtered_lyrics}")
+
     # Creating frequency of each word and storing in model_dict dictionary
     for word in filtered_lyrics:
         if word in model_dict.keys():
             model_dict[word] += 1
     
-    # Creating numpy array from dictionary
+    # Creating numpy array from dictionary to feed into ML model
     model_array = np.array([list(model_dict.values())])
 
-    # Load the ML model from the file 
-    # cnb_model = joblib.load("NB_model_v1.1.pkl")
-    model = pickle.load(open('rf_model_pickle_v2.pkl','rb'))
-    # model = joblib.load("NB_model_v3.pkl")
-    # model = keras.models.load_model("nn_model_v3.h5")
+    # Load the trained and serialized ML model from file 
+    model = joblib.load("NB_model_v3.pkl")
 
     # Feed model_array into ML Model, returning prediction
-    # prediction = cnb_model.predict(model_dict)
     prediction = model.predict(model_array)[0]
-    
-    # prediction = "True"
     print(f"Prediction from lyrics_BoW: {prediction}")
 
     if prediction <= 0.5:
@@ -72,12 +64,12 @@ def lyrics_BoW(lyrics):
 
     return prediction
 
-def plot_unique_words_bubble():
-    word_freq_data = word_frequency()
+def plot_unique_words_bubble(data):
+    # word_freq_data = word_frequency()
 
-    word_freq_df = pd.DataFrame(word_freq_data)
-    
-    # global word_freq_df
+    # word_freq_df = pd.DataFrame(word_freq_data)
+    word_freq_df = pd.DataFrame(data)
+
     # Get word frequencies of top 100 successful and unsuccessful songs
     top100_s = word_freq_df.sort_values('freq_successful', ascending=False).iloc[:100]['words'].to_list()
     top100_u = word_freq_df.sort_values('freq_unsuccessful', ascending=False).iloc[:100]['words'].to_list()
@@ -104,11 +96,12 @@ def plot_unique_words_bubble():
     unique_JSON = json.dumps(unique)
     return unique_JSON
 
-def plot_freq_words_bar():
-    word_freq_data = word_frequency()
+def plot_freq_words_bar(data):
+    # word_freq_data = word_frequency()
     print("Returning to plot_freq_words_bar() function")
 
-    word_freq_df = pd.DataFrame(word_freq_data)
+    # word_freq_df = pd.DataFrame(word_freq_data)
+    word_freq_df = pd.DataFrame(data)
 
     # Sort df by successful word frequencies
     s_word_freq_df = word_freq_df.sort_values('freq_successful', ascending=False)
@@ -140,9 +133,9 @@ class WordFreq(db.Model):
 
 @app.route("/")
 def index():
-    freq_JSON = plot_freq_words_bar()
-    unique_JSON = plot_unique_words_bubble()
-    print("Back to route /")
+    word_freq_data = word_frequency()
+    freq_JSON = plot_freq_words_bar(word_freq_data)
+    unique_JSON = plot_unique_words_bubble(word_freq_data)
    
     return render_template(
         "index.html",

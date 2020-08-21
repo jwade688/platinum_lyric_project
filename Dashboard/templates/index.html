@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../static/css/style.css">
 
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
 
   <!-- https://www.w3schools.com/howto/howto_css_smooth_scroll.asp#section2 -->
   <script>
@@ -70,7 +70,7 @@
           to determine its likelihood of achieving success.</p>
         <p class="lead pb-5">Our metric of success was defined as the song having 
           reached <a href="https://www.billboard.com/charts/hot-100" target="_blank">Billboard's 
-            top 100 Chart</a> and remained there for at least one week.</p>
+            Hot 100 Chart</a> and remained there for at least one week.</p>
       </div>
       
       
@@ -118,7 +118,7 @@
             Explore the dataset below to find insights on certain words that may contribute even more 
             to the success of your song.
           </p>
-          <button type="button" class="btn btn-secondary alert-btn" onclick="clearText()">Test another one!</button>
+          <button type="button" class="btn btn-secondary alert-btn" name="clear-btn">Test another one!</button>
         </div>
         
         <div class="alert alert-warning" id="not-success-msg" role="alert" style="display: none;">
@@ -130,7 +130,7 @@
           <p>
             Explore the dataset below to find insights on certain words that may contribute to the success of your song.
           </p>
-          <button type="button" class="btn btn-secondary alert-btn" onclick="clearText()">Test another one!</button>
+          <button type="button" class="btn btn-secondary alert-btn" name="clear-btn">Test another one!</button>
         </div>
 
         <div class="alert alert-secondary" id="neutral-msg" role="alert" style="display: block;">
@@ -146,9 +146,18 @@
         </div>
 
         <script type="text/javascript">
-          function clearText() {
-            document.getElementById('lyricsInput').value = '';
-          };
+          $(function() {
+            $("button[name='clear-btn']").click(function() {
+              $('#lyricsInput').val('');
+              if ($('#success-msg').is(':visible')) {
+                $('#success-msg').hide();
+                $('#neutral-msg').show()
+              } else {
+                $('#not-success-msg').hide();
+                $('#neutral-msg').show()
+              };
+            });
+          });
         </script>
       </div>
     </div>
@@ -189,10 +198,12 @@
           many other factors can collectively lead to its success (or failure!). Find beautifully designed charts with 
           insights including factors like Acousticness, Instrumentalness, Tempo, Energy, Loudness, 
           and others through the years and for different music genres on the 
-          <a href="https://public.tableau.com/profile/jacob.wade#!/vizhome/platinum_tableau_dashboard/Featurestory?publish=yes" target="_blank" class="tableau-link">Tableau Dashboard</a>.
+          <a name="tableau-dash" class="tableau-link">Tableau Dashboard</a>.
         </p>
       </div>
     </div>
+
+
 
     <div class="row white-block pl-5 pr-5 pb-5">
       <div class="col-md-12 pt-5">
@@ -378,18 +389,25 @@
     <div class="row black-block pl-5 pr-5 pt-5 pb-5">
       <div class="col-md-12">
         <h1 class="display-4 main-title second-block-title">Thanks for stopping by!</h1>
-        <p class="lead pb-5">Please enjoy this loop of some of the most common words used in 
-          songs through the years. And don't forget to check out the Tableau Dashboard for more.
+        <p class="lead pb-4">Please enjoy this loop of some of the most common words used in 
+          songs throughout the years. And for more insights and cool visualizations, don't forget to check out the 
+          <a name="tableau-dash" class="tableau-link">Tableau Dashboard</a>
+          .
         </p>
         <div class="video">
-          <video width="400" controls autoplay>
-            <source src="../static/images/word_cloud_decade_small_loop.mp4" type="video/mp4">
-          Your browser does not support the video tag.
+          <video controls autoplay muted>
+            <source src="../static/images/word_cloud_decade_small_loop_1.6speed.mp4" type="video/mp4">
+            Your browser does not support the video tag.
           </video>
         </div>
       </div>
     </div>
-    
+    <script type="text/javascript">
+      $("a[name='tableau-dash']").click(function() {
+          var tableau_url = 'https://public.tableau.com/profile/jacob.wade#!/vizhome/platinum_tableau_dashboard2/Featurestory?publish=yes';
+          window.open(tableau_url, '_blank');
+        });
+    </script>
   </div>
 
 </body>

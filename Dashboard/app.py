@@ -87,6 +87,7 @@ def plot_unique_words_bubble(data):
     # Get size list
     s_size = [f*300 for f in s_unique_f]
     u_size = [f*300 for f in u_unique_f]
+
     # Add lists to dictionary, then to JSON
     unique = {
         'top100_s_unique': top100_s_unique, 's_unique_f': s_unique_f,

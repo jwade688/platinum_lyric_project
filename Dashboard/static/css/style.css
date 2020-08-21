@@ -11,24 +11,28 @@ a:link {
     color: white !important;
     font-weight: bold;
     text-decoration: none;
+    cursor: pointer;
 }
 
 a:hover {
     color: peachpuff !important;
     font-weight: bold;
     text-decoration: none;
+    cursor: pointer;
 }
 
 a:active {
     color: peachpuff !important;
     font-weight: bold;
     text-decoration: none;
+    cursor: pointer;
 }
 
 a:visited {
     color: white;
     font-weight: bold;
     text-decoration: none;
+    cursor: pointer;
 }
 
 p {
@@ -151,6 +155,7 @@ p {
     padding-top: 1px;
     padding-bottom: 1px;
     border-radius: 4px;
+    font-weight: bold;
 }
 
 .video {

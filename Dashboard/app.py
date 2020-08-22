@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, url_for, redirect
+from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from config import password
 import plotly
@@ -6,7 +6,6 @@ import plotly.graph_objs as go
 import pandas as pd
 import numpy as np
 import json
-import os
 import nltk
 from nltk import word_tokenize
 from nltk.corpus import stopwords
@@ -21,9 +20,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"postgres://postgres:{password}@platinu
 
 # Create a Flask-SQLAlchemy instance
 db = SQLAlchemy(app)
-
-# Read csv of word frequencies for successful and unsuccessful song lyrics
-# word_freq_df = pd.read_csv("https://platinum-lyric-bucket.s3.us-east-2.amazonaws.com/word_freq.csv")
 
 def lyrics_BoW(lyrics):
     # Creating dictionary to match trained ML model, with words as keys and filled with zeros
@@ -65,9 +61,7 @@ def lyrics_BoW(lyrics):
     return prediction
 
 def plot_unique_words_bubble(data):
-    # word_freq_data = word_frequency()
-
-    # word_freq_df = pd.DataFrame(word_freq_data)
+    # Create DataFrame with data from database
     word_freq_df = pd.DataFrame(data)
 
     # Get word frequencies of top 100 successful and unsuccessful songs
@@ -77,6 +71,7 @@ def plot_unique_words_bubble(data):
     # Get unique words in successful and unsuccessful songs
     top100_s_unique = [word for word in top100_s if word not in top100_u]
     top100_u_unique = [word for word in top100_u if word not in top100_s]
+    
     # Get frequencies of unique words
     s_unique_f = []
     for word in top100_s_unique:
@@ -98,24 +93,24 @@ def plot_unique_words_bubble(data):
     return unique_JSON
 
 def plot_freq_words_bar(data):
-    # word_freq_data = word_frequency()
-    print("Returning to plot_freq_words_bar() function")
-
-    # word_freq_df = pd.DataFrame(word_freq_data)
+    # Create DataFrame with data from database
     word_freq_df = pd.DataFrame(data)
 
     # Sort df by successful word frequencies
     s_word_freq_df = word_freq_df.sort_values('freq_successful', ascending=False)
+    
     # Get word frequencies of successful and unsuccessful songs
     s_freq = s_word_freq_df.iloc[0:20]['freq_successful'].to_list()
     u_freq = s_word_freq_df.iloc[0:20]['freq_unsuccessful'].to_list()
     words = s_word_freq_df.iloc[0:20]['words'].to_list()
+    
     # Define colors for chart
     colors_s = ['lightsteelblue',] * 20
     colors_s[0] = 'steelblue'
     colors_u = ['darksalmon',] * 20
     colors_u[0] = 'indianred'
 
+    # Add data to dictionary, then to JSON
     freq = {'words': words,'s_freq': s_freq, 'u_freq': u_freq, 'colors_s': colors_s, 'colors_u': colors_u}
     freq_JSON = json.dumps(freq)
     return freq_JSON
@@ -134,7 +129,9 @@ class WordFreq(db.Model):
 
 @app.route("/")
 def index():
+    # Call function that gets word frequency data from database
     word_freq_data = word_frequency()
+    # Pass data from database into functions that will return data for Plotly charts
     freq_JSON = plot_freq_words_bar(word_freq_data)
     unique_JSON = plot_unique_words_bubble(word_freq_data)
    
@@ -146,7 +143,6 @@ def index():
 
 @app.route("/get_lyrics", methods=["GET", "POST"])
 def get_lyrics():
-    print("Entering /get_lyrics route")
     # Retrieve user input containing lyrics
     lyrics_input = request.args.get('userLyrics', 0, type=str)
     print(f"lyrics_input: {lyrics_input}")
@@ -176,9 +172,6 @@ def word_frequency():
     return word_dict
 
 
-
 if __name__ == "__main__":
-    app.run(debug=True)
-    # we first try to grab the port from the app’s environment, and if not found, it defaults to port 5000
-    # port = int(os.environ.get('PORT', 5000))
-    # app.run(host='0.0.0.0', port=port)
+    app.run(debug=False)
+

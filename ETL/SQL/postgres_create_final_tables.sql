@@ -99,7 +99,78 @@ select *
 from platinum_features
 inner join pivot using (track_id);
 
+
+--- create the platinum_spotify table
+--join with spotify only (no target success)
+create table pivot_spotify as
+select p.track_id, s.spot_id, p.artist_name, p.song_title, s.song_year, s.feature_genre
+from pivot_songs p
+inner join spotify s
+on p.artist_name=s.artist_name and p.song_title=s.song_title;
+
+alter pivot_spotify
+add primary key(track_id);  -- error message : duplicates
+
+ALTER TABLE pivot_spotify
+	ADD COLUMN id SERIAL PRIMARY KEY;
+	
+DELETE FROM pivot_spotify p1
+    USING   pivot_spotify p2
+WHERE  p1.id < p2.id  
+    AND p1.track_id  = p2.track_id;
+	
+select * from pivot_spotify;	
+
+alter table pivot_spotify
+drop column id;
+
+create table platinum_spotify as
+select *
+from pivot_spotify
+inner join pivot using(track_id);
+
+
+-- remove 4 word columns that were problematic for machine 
+--learning models but were not removed during data cleaning 
+
+-- remove word_cost, word_oder, word_the, word_que columns from 
+--all datasets
+alter table pivot
+drop column word_cost,
+drop column word_oder,
+drop column word_que,
+drop column word_the;
+
+alter table platinum_lyrics
+drop column word_cost,
+drop column word_oder,
+drop column word_que,
+drop column word_the;
+
+alter table platinum_lyrics_features
+drop column word_cost,
+drop column word_oder,
+drop column word_que,
+drop column word_the;
+
+alter table platinum_spotify
+drop column word_cost,
+drop column word_oder,
+drop column word_que,
+drop column word_the;
+
+
+
+--------------------------------------------
+--------------------------------------------
 -- final sets:
 -- platinum_lyrics
 -- platinum_lyrics_features
 -- platinum_features
+-- platinum_spotify
+-----------------------------------------------
+----------------------------------------------
+
+
+
+

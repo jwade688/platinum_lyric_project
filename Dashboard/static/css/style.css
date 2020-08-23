@@ -11,24 +11,28 @@ a:link {
     color: white !important;
     font-weight: bold;
     text-decoration: none;
+    cursor: pointer;
 }
 
 a:hover {
     color: peachpuff !important;
     font-weight: bold;
     text-decoration: none;
+    cursor: pointer;
 }
 
 a:active {
     color: peachpuff !important;
     font-weight: bold;
     text-decoration: none;
+    cursor: pointer;
 }
 
 a:visited {
     color: white;
     font-weight: bold;
     text-decoration: none;
+    cursor: pointer;
 }
 
 p {
@@ -91,6 +95,14 @@ p {
 
 .dark-block {
     background-color: #343A40;
+    color: white;
+    /* padding-top: 4.5rem !important; */
+    padding-bottom: 5rem !important;
+}
+
+.black-block {
+    background-color: black;
+    color: white;
     /* padding-top: 4.5rem !important; */
     padding-bottom: 5rem !important;
 }
@@ -128,7 +140,6 @@ p {
     max-width: 20rem;
     margin-left: auto;
     margin-right: auto;
-    padding-bottom: 1.5rem;
 }
 
 .hr-dark-bg {
@@ -144,4 +155,11 @@ p {
     padding-top: 1px;
     padding-bottom: 1px;
     border-radius: 4px;
+    font-weight: bold;
+}
+
+.video {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

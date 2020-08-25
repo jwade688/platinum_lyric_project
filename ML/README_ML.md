@@ -81,6 +81,15 @@ While the optimization results were encouraging, we did not stop there. We decid
 
 This looked quite promising. In addition to that, we were able to get a list of important features which would allow us to filter through our features if necessary, in later revisions. However, this ended up being so big that saving and using it to make predictions was essentially impossible.
 
+## Final model evaluation
+
+While the main metric to evaluate our models was their accuracy score, we also looked into their F1 scores. This revealed an interesting insight into our models. All our models have quite low F1 scores / precision rates in predicting the "hit" class (between 0.33 and 0.43). This means our models tend to do much better predicting our "flop" or 0 class. This is an issue we would need to look into in the future. We suspect that it is caused by our imbalanced dataset. There are a few steps we could take to address this issue besides trying other models and optimizing our existing ones. We could 
+
+  -- use a different resampling method
+  -- calculate F1 score in a few different ways and compare them with each other.
+
+In our current application, we are using the Complement Naive Bayes model, since as it stands it has the highest accuracy and F1 scores.
+
 
 
   
@@ -93,5 +102,6 @@ This looked quite promising. In addition to that, we were able to get a list of 
 - 5)https://stats.stackexchange.com/questions/367155/why-lasso-for-feature-selection
 - 6)https://blogs.sas.com/content/subconsciousmusings/2017/05/18/stacked-ensemble-models-win-data-science-competitions/
 - 7)https://theprofessionalspoint.blogspot.com/2019/02/advantages-and-disadvantages-of-random.html
+- 8) https://sebastianraschka.com/faq/docs/computing-the-f1-score.html
 
 

@@ -1,7 +1,7 @@
 # platinum_lyric_project
 ​
 ## Project Overview
-The team will build a model that trains the lyrics of a song to predict whether a song will be a hit or not. The team will also use models to find out what other features of songs will predict a song’s success. Other features may include genre, key, tempo, danceability, energy, valence, speechiness, instrumentalness, liveness, loudness, etc. We will also set out to see what qualities do popular songs have by looking for patterns in lyric usage and in the values of the other features.\
+The team will build a model that trains the lyrics of a song to predict whether a song will be a hit or not. The team will also use models to find out what other features of songs will predict a song’s success. Other features may include genre, key, tempo, danceability, energy, valence, speechiness, instrumentalness, liveness, loudness, etc. We will also set out to see what qualities do popular songs have by looking for patterns in lyric usage and in the values of the other features.
 
 ## Overview of deliverables:
 This is where you can find each deliverable:
